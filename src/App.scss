@@ -1,0 +1,19 @@
+@charset "utf-8";
+@import "../node_modules/bulma/bulma.sass";
+
+* { 
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root { height: 100%; }
+
+.App {
+  display: flex;
+}
+
+.App > * {
+  min-height: 100%;
+  width: 100%;
+}
