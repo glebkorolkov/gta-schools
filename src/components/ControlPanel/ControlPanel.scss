@@ -1,0 +1,29 @@
+.ControlPanel {
+  min-width: 350px;
+  min-height: 100vh;
+  flex: 0;
+  background-color: #f0f0f0;
+  border-right: solid 1px #e3e3e3;
+
+  &.collapsed {
+    min-width: 50px;
+  }
+
+  .ControlPanelToggle:hover { 
+    cursor: pointer;
+  }
+
+  .column {
+    position: relative;
+  }
+
+  .toggle {
+    position: absolute;
+    top: 1.5rem;
+    right: 1rem;
+  }
+
+  .filter-title {
+    margin-bottom: .5rem;
+  }
+}
