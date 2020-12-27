@@ -1,9 +1,9 @@
 import React from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import './MultiCheckbox.scss'
 
 
-class MultiCheckbox extends React.Component {
+export default class MultiCheckbox extends React.Component {
 
   constructor(props) {
     super(props)
@@ -16,6 +16,7 @@ class MultiCheckbox extends React.Component {
   componentDidMount() {
     const { fields } = this.props
     this.setState({ fields })
+    this.props.onChange(fields)
   }
 
   renderCheckbox(field, i) {
@@ -58,6 +59,3 @@ MultiCheckbox.propTypes = {
   ),
   onChange: PropTypes.func
 }
-
-
-export default MultiCheckbox
