@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons'
 import './ControlPanel.scss'
@@ -12,7 +13,8 @@ export default class ControlPanel extends React.Component {
     super(props)
     this.state = {
       collapsed: false,
-      schoolTypes: ['Elementary', 'Senior']
+      schoolTypes: ['Elementary', 'Senior'],
+      filters: {}
     }
     this.toggle = this.toggle.bind(this)
     this.handleSchoolTypeFilter = this.handleSchoolTypeFilter.bind(this)
@@ -23,7 +25,13 @@ export default class ControlPanel extends React.Component {
   }
 
   handleSchoolTypeFilter(fields) {
-    console.log(fields)
+    const includeVals = fields
+      .filter(field => field.checked)
+      .map(field => field.label)
+    let updatedFilters = this.state.filters
+    updatedFilters.school_type = includeVals
+    this.setState({filters: updatedFilters})
+    this.props.onChange(this.state.filters)
   }
 
   render() {
@@ -53,4 +61,9 @@ export default class ControlPanel extends React.Component {
       </div>
     )
   }
+}
+
+
+ControlPanel.propTypes = {
+  onChange: PropTypes.func
 }
