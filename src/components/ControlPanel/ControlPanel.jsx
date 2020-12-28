@@ -29,11 +29,14 @@ export default class ControlPanel extends React.Component {
         ]
       },
       filters: {},
-      controls: {}
+      controls: {sortBy: 'type'}
     }
     this.toggle = this.toggle.bind(this)
+    this.isMap = this.isMap.bind(this)
     this.handleDisplayControl = this.handleDisplayControl.bind(this)
+    this.handleSortByControl = this.handleSortByControl.bind(this)
     this.updateFilters = this.updateFilters.bind(this)
+    this.updateControls = this.updateControls.bind(this)
     this.selectedValsFromMultiCheckBoxFields = this.selectedValsFromMultiCheckBoxFields.bind(this)
     this.handleSchoolTypeFilter = this.handleSchoolTypeFilter.bind(this)
     this.handleSchoolBoardFilter = this.handleSchoolBoardFilter.bind(this)
@@ -41,6 +44,10 @@ export default class ControlPanel extends React.Component {
 
   toggle() {
     this.setState({collapsed: !this.state.collapsed})
+  }
+
+  isMap() {
+    return this.state.controls.display && this.state.controls.display.toLowerCase() === 'map'
   }
 
   selectedValsFromMultiCheckBoxFields(fields) {
@@ -66,11 +73,19 @@ export default class ControlPanel extends React.Component {
     this.updateFilters('school_board', includeVals)
   }
 
-  handleDisplayControl(option) {
+  updateControls(key, val) {
     let updatedControls = this.state.controls
-    updatedControls.display = option
+    updatedControls[key] = val
     this.setState({ controls: updatedControls })
     this.props.onControlChange(this.state.controls)
+  }
+
+  handleDisplayControl(option) {
+    this.updateControls('display', option)
+  }
+
+  handleSortByControl(e) {
+    this.updateControls('sortBy', e.target.value)
   }
 
   render() {
@@ -89,12 +104,23 @@ export default class ControlPanel extends React.Component {
         fields={this.state.defaults.schoolBoards}
         onChange={this.handleSchoolBoardFilter}
       />
+    const sortSelect = (
+      <div class="select is-small">
+        <select onChange={this.handleSortByControl}>
+          <option value="type">School Type</option>
+          <option value="school_board">School Board</option>
+        </select>
+      </div>
+    )
     const renderFilters = () => {
       if (!this.state.collapsed) {
         return (
           <div>
             <h3 className="title is-3">Controls</h3>
             <InlineControl label="Display" control={ displayToggle } />
+            <InlineControl
+              label={ this.isMap() ? 'Color by' : 'Sort by' }
+              control={ sortSelect } />
             <Control label="School Type" control={ schoolTypeMultiCheckbox }/>
             <Control label="School Board" control={ schoolBoardMultiCheckbox }/>
           </div>
