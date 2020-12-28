@@ -4,10 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons'
 import './ControlPanel.scss'
 
+import Control from '../Control'
+import InlineControl from '../InlineControl'
 import MultiCheckbox from '../MultiCheckbox'
 import ButtonToggle from '../ButtonToggle'
-import InlineControl from '../InlineControl'
-import Control from '../Control'
+import SingleSelect from '../SingleSelect'
 
 
 export default class ControlPanel extends React.Component {
@@ -94,8 +95,12 @@ export default class ControlPanel extends React.Component {
     this.updateControls('display', selectedVal)
   }
 
-  handleSortByControl(e) {
-    this.updateControls('sortBy', e.target.value)
+  handleSortByControl(fields) {
+    const selectedVals = fields
+      .filter(field => field.selected)
+      .map(field => (field.value || field.label))
+    const selectedVal = selectedVals[0] || null
+    this.updateControls('sortBy', selectedVal)
   }
 
   render() {
@@ -115,12 +120,10 @@ export default class ControlPanel extends React.Component {
         onChange={this.handleSchoolBoardFilter}
       />
     const sortSelect = (
-      <div class="select is-small">
-        <select onChange={this.handleSortByControl}>
-          <option value="type">School Type</option>
-          <option value="school_board">School Board</option>
-        </select>
-      </div>
+      <SingleSelect 
+        fields={this.state.defaults.sortBy}
+        onChange={this.handleSortByControl}
+      />
     )
     const renderFilters = () => {
       if (!this.state.collapsed) {
