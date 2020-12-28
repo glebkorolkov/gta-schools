@@ -6,7 +6,9 @@ export default class ButtonToggle extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      fields: []
+    }
     this.handleClick = this.handleClick.bind(this)
   }
 
@@ -41,7 +43,7 @@ export default class ButtonToggle extends React.Component {
   render() {
     return (
       <div class="buttons has-addons">
-        { this.props.fields.map((field, i) => this.renderOption(field, i)) }
+        { this.state.fields.map((field, i) => this.renderOption(field, i)) }
       </div>
     )
   }
