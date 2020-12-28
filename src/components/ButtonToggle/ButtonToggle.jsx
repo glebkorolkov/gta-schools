@@ -11,34 +11,37 @@ export default class ButtonToggle extends React.Component {
   }
 
   componentDidMount() {
-    const selected = this.props.selectedOption || this.props.options[0]
-    this.setState({ selectedOption: selected })
-    this.props.onChange(selected)
+    const { fields } = this.props
+    this.setState({ fields })
+    this.props.onChange(fields)
   }
 
-  renderOption(option, i) {
+  renderOption(field, i) {
     let classNames = 'button is-small'
-    if (this.state.selectedOption === option)
+    if (field.selected)
       classNames += ' is-selected is-info'
     return (
       <button
         key={ i }
         className={ classNames }
-        onClick={ () => this.handleClick(option) }>
-          { option }
+        onClick={ () => this.handleClick(i) }>
+          { field.label }
       </button>
     )
   }
 
-  handleClick(option) {
-    this.setState({ selectedOption: option })
-    this.props.onChange(option)
+  handleClick(optionInd) {
+    let fields = this.state.fields
+    fields.forEach(field => {field.selected = false})
+    fields[optionInd].selected = true
+    this.setState({ fields: fields })
+    this.props.onChange(fields)
   }
 
   render() {
     return (
       <div class="buttons has-addons">
-        { this.props.options.map((option, i) => this.renderOption(option, i)) }
+        { this.props.fields.map((field, i) => this.renderOption(field, i)) }
       </div>
     )
   }
@@ -47,7 +50,15 @@ export default class ButtonToggle extends React.Component {
 
 
 ButtonToggle.propTypes = {
-  onChange: PropTypes.func,
-  options: PropTypes.arrayOf(PropTypes.string),
-  selectedOption: PropTypes.string 
+  fields: PropTypes.arrayOf(
+    PropTypes.exact({
+      label: PropTypes.string,
+      selected: PropTypes.bool,
+      value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+      ])
+    })
+  ),
+  onChange: PropTypes.func
 }
