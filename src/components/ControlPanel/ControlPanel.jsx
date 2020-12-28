@@ -16,9 +16,15 @@ export default class ControlPanel extends React.Component {
     super(props)
     this.state = {
       collapsed: false,
-      schoolTypes: ['Elementary', 'Secondary'],
       defaults: {
-        display: ['Map', 'List'],
+        display: [
+          {label: 'Map', value: 'map', selected: true},
+          {label: 'List', value: 'list', selected: false}
+        ],
+        sortBy: [
+          {label: 'School Type', value: 'type', selected: true},
+          {label: 'School Board', value: 'school_board', selected: false}
+        ],
         schoolTypes: [
           {label: 'Elementary', checked: true},
           {label: 'Secondary', checked: true}
@@ -80,8 +86,12 @@ export default class ControlPanel extends React.Component {
     this.props.onControlChange(this.state.controls)
   }
 
-  handleDisplayControl(option) {
-    this.updateControls('display', option)
+  handleDisplayControl(fields) {
+    const selectedVals = fields
+      .filter(field => field.selected)
+      .map(field => (field.value || field.label))
+    const selectedVal = selectedVals[0] || null
+    this.updateControls('display', selectedVal)
   }
 
   handleSortByControl(e) {
@@ -91,7 +101,7 @@ export default class ControlPanel extends React.Component {
   render() {
     const displayToggle =
       <ButtonToggle
-        options={this.state.defaults.display}
+        fields={this.state.defaults.display}
         onChange={this.handleDisplayControl}
       />
     const schoolTypeMultiCheckbox = 
