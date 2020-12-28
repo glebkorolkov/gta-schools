@@ -22,28 +22,45 @@ export default class ControlPanel extends React.Component {
         schoolTypes: [
           {label: 'Elementary', checked: true},
           {label: 'Secondary', checked: true}
+        ],
+        schoolBoards: [
+          { label: 'TDSB', checked: true },
+          { label: 'YRDSB', checked: false }
         ]
       },
       filters: {},
       controls: {}
     }
     this.toggle = this.toggle.bind(this)
-    this.handleSchoolTypeFilter = this.handleSchoolTypeFilter.bind(this)
     this.handleDisplayControl = this.handleDisplayControl.bind(this)
+    this.updateFilters = this.updateFilters.bind(this)
+    this.handleSchoolTypeFilter = this.handleSchoolTypeFilter.bind(this)
+    this.handleSchoolBoardFilter = this.handleSchoolBoardFilter.bind(this)
   }
 
   toggle() {
     this.setState({collapsed: !this.state.collapsed})
   }
 
+  updateFilters(key, val) {
+    let updatedFilters = this.state.filters
+    updatedFilters[key] = val
+    this.setState({ filters: updatedFilters })
+    this.props.onFilterChange(this.state.filters)
+  }
+
   handleSchoolTypeFilter(fields) {
     const includeVals = fields
       .filter(field => field.checked)
       .map(field => field.label)
-    let updatedFilters = this.state.filters
-    updatedFilters.type = includeVals
-    this.setState({filters: updatedFilters})
-    this.props.onFilterChange(this.state.filters)
+    this.updateFilters('type', includeVals)
+  }
+
+  handleSchoolBoardFilter(fields) {
+    const includeVals = fields
+      .filter(field => field.checked)
+      .map(field => field.label)
+    this.updateFilters('school_board', includeVals)
   }
 
   handleDisplayControl(option) {
@@ -64,6 +81,11 @@ export default class ControlPanel extends React.Component {
         fields={this.state.defaults.schoolTypes}
         onChange={this.handleSchoolTypeFilter}
       />
+    const schoolBoardMultiCheckbox =
+      <MultiCheckbox
+        fields={this.state.defaults.schoolBoards}
+        onChange={this.handleSchoolBoardFilter}
+      />
     const renderFilters = () => {
       if (!this.state.collapsed) {
         return (
@@ -71,6 +93,7 @@ export default class ControlPanel extends React.Component {
             <h3 className="title is-3">Controls</h3>
             <InlineControl label="Display" control={ displayToggle } />
             <Control label="School Type" control={ schoolTypeMultiCheckbox }/>
+            <Control label="School Board" control={ schoolBoardMultiCheckbox }/>
           </div>
         )
       }
