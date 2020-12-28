@@ -5,6 +5,9 @@ import { faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-s
 import './ControlPanel.scss'
 
 import MultiCheckbox from '../MultiCheckbox'
+import ButtonToggle from '../ButtonToggle'
+import InlineControl from '../InlineControl'
+import Control from '../Control'
 
 
 export default class ControlPanel extends React.Component {
@@ -13,11 +16,20 @@ export default class ControlPanel extends React.Component {
     super(props)
     this.state = {
       collapsed: false,
-      schoolTypes: ['Elementary', 'Senior'],
-      filters: {}
+      schoolTypes: ['Elementary', 'Secondary'],
+      defaults: {
+        display: ['Map', 'List'],
+        schoolTypes: [
+          {label: 'Elementary', checked: true},
+          {label: 'Secondary', checked: true}
+        ]
+      },
+      filters: {},
+      controls: {}
     }
     this.toggle = this.toggle.bind(this)
     this.handleSchoolTypeFilter = this.handleSchoolTypeFilter.bind(this)
+    this.handleDisplayControl = this.handleDisplayControl.bind(this)
   }
 
   toggle() {
@@ -29,22 +41,36 @@ export default class ControlPanel extends React.Component {
       .filter(field => field.checked)
       .map(field => field.label)
     let updatedFilters = this.state.filters
-    updatedFilters.school_type = includeVals
+    updatedFilters.type = includeVals
     this.setState({filters: updatedFilters})
-    this.props.onChange(this.state.filters)
+    this.props.onFilterChange(this.state.filters)
+  }
+
+  handleDisplayControl(option) {
+    let updatedControls = this.state.controls
+    updatedControls.display = option
+    this.setState({ controls: updatedControls })
+    this.props.onControlChange(this.state.controls)
   }
 
   render() {
+    const displayToggle =
+      <ButtonToggle
+        options={this.state.defaults.display}
+        onChange={this.handleDisplayControl}
+      />
+    const schoolTypeMultiCheckbox = 
+      <MultiCheckbox
+        fields={this.state.defaults.schoolTypes}
+        onChange={this.handleSchoolTypeFilter}
+      />
     const renderFilters = () => {
       if (!this.state.collapsed) {
         return (
           <div>
-            <h3 className="title is-3">Filters</h3>
-            <h5 className="title is-6 filter-title">School Type</h5>
-            <MultiCheckbox
-              fields={ this.state.schoolTypes.map(schType => ({label: schType, checked: true})) }
-              onChange={ this.handleSchoolTypeFilter }
-            />
+            <h3 className="title is-3">Controls</h3>
+            <InlineControl label="Display" control={ displayToggle } />
+            <Control label="School Type" control={ schoolTypeMultiCheckbox }/>
           </div>
         )
       }
@@ -65,5 +91,6 @@ export default class ControlPanel extends React.Component {
 
 
 ControlPanel.propTypes = {
-  onChange: PropTypes.func
+  onFilterChange: PropTypes.func,
+  onControlChange: PropTypes.func
 }
