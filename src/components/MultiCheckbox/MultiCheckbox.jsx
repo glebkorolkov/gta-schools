@@ -54,7 +54,11 @@ MultiCheckbox.propTypes = {
   fields: PropTypes.arrayOf(
     PropTypes.exact({
       label: PropTypes.string,
-      checked: PropTypes.bool
+      checked: PropTypes.bool,
+      value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+      ])
     })
   ),
   onChange: PropTypes.func
