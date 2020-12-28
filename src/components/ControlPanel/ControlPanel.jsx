@@ -24,8 +24,8 @@ export default class ControlPanel extends React.Component {
           {label: 'Secondary', checked: true}
         ],
         schoolBoards: [
-          { label: 'TDSB', checked: true },
-          { label: 'YRDSB', checked: false }
+          { label: 'Toronto DSB', checked: true, value: 'TDSB' },
+          { label: 'York Region DSB', checked: false, value: 'YRDSB' }
         ]
       },
       filters: {},
@@ -34,12 +34,19 @@ export default class ControlPanel extends React.Component {
     this.toggle = this.toggle.bind(this)
     this.handleDisplayControl = this.handleDisplayControl.bind(this)
     this.updateFilters = this.updateFilters.bind(this)
+    this.selectedValsFromMultiCheckBoxFields = this.selectedValsFromMultiCheckBoxFields.bind(this)
     this.handleSchoolTypeFilter = this.handleSchoolTypeFilter.bind(this)
     this.handleSchoolBoardFilter = this.handleSchoolBoardFilter.bind(this)
   }
 
   toggle() {
     this.setState({collapsed: !this.state.collapsed})
+  }
+
+  selectedValsFromMultiCheckBoxFields(fields) {
+    return fields
+      .filter(field => field.checked)
+      .map(field => (field.value || field.label))
   }
 
   updateFilters(key, val) {
@@ -50,16 +57,12 @@ export default class ControlPanel extends React.Component {
   }
 
   handleSchoolTypeFilter(fields) {
-    const includeVals = fields
-      .filter(field => field.checked)
-      .map(field => field.label)
+    const includeVals = this.selectedValsFromMultiCheckBoxFields(fields)
     this.updateFilters('type', includeVals)
   }
 
   handleSchoolBoardFilter(fields) {
-    const includeVals = fields
-      .filter(field => field.checked)
-      .map(field => field.label)
+    const includeVals = this.selectedValsFromMultiCheckBoxFields(fields)
     this.updateFilters('school_board', includeVals)
   }
 
