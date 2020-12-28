@@ -47,7 +47,7 @@ class App extends React.Component {
   }
 
   renderSchools() {
-    if (this.state.display == 'map')
+    if (this.state.display === 'map')
       return <SchoolMap zoom={12} schools={this.getFilteredSchools()} />
     else
       return <p>List placeholder</p>
