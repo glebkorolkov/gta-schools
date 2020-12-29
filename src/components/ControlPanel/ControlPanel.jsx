@@ -23,8 +23,8 @@ export default class ControlPanel extends React.Component {
           {label: 'List', value: 'list', selected: false}
         ],
         sortBy: [
-          {label: 'School Type', value: 'type', selected: true},
-          {label: 'School Board', value: 'school_board', selected: false}
+          {label: 'School Type', value: 'type'},
+          {label: 'School Board', value: 'school_board'}
         ],
         schoolTypes: [
           {label: 'Elementary', checked: true},
@@ -95,12 +95,8 @@ export default class ControlPanel extends React.Component {
     this.updateControls('display', selectedVal)
   }
 
-  handleSortByControl(fields) {
-    const selectedVals = fields
-      .filter(field => field.selected)
-      .map(field => (field.value || field.label))
-    const selectedVal = selectedVals[0] || null
-    this.updateControls('sortBy', selectedVal)
+  handleSortByControl(selectedValue) {
+    this.updateControls('sortBy', selectedValue)
   }
 
   render() {
