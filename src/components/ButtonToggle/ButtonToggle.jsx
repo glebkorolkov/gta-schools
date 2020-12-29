@@ -42,7 +42,7 @@ export default class ButtonToggle extends React.Component {
 
   render() {
     return (
-      <div class="buttons has-addons">
+      <div className="buttons has-addons">
         { this.state.fields.map((field, i) => this.renderOption(field, i)) }
       </div>
     )
