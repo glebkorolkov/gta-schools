@@ -21,8 +21,9 @@ const InlineControl = (props) => {
 
 
 InlineControl.propTypes = {
-  label: PropTypes.string,
-  control: PropTypes.elementType
+  label: PropTypes.string.isRequired,
+  control: PropTypes.element.isRequired
 }
+
 
 export default InlineControl
