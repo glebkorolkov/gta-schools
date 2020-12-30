@@ -11,10 +11,8 @@ import './YearRangeSlider.scss'
 
 const YearRangeSlider = (props) => {
 
-  let initOnChangeCalled = false
-
-  const [value, setValue] = React.useState(props.initRange)
-  const [showNa, setShowNa] = React.useState(props.naToggle)
+  const [data, setData] = React.useState({value: props.initRange, showNa: props.naToggle})
+  const [initData] = React.useState({value: props.initRange, showNa: props.naToggle})
 
   const round5Up = x => Math.ceil(x / 5) * 5
   const round5Down = x => Math.floor(x / 5) * 5
@@ -34,20 +32,21 @@ const YearRangeSlider = (props) => {
   const debounceMs = props.debounce || 1000
   const reportRangeDebounced = React.useRef(_debounce(reportRange, debounceMs))
 
+  const {onChange} = props
   React.useEffect(() => {
-    reportRange({ range: value, showNa: showNa })
-  }, [])
+    onChange({range: initData.value, showNa: initData.showNa})
+  }, [initData, onChange])
 
   const handleChange = (event, val) => {
-    setValue(val)
-    const payload = {range: value, showNa: showNa}
+    setData({...data, value: val})
+    const payload = {range: data.value, showNa: data.showNa}
     reportRangeDebounced.current(payload)
   }
 
   const handleNaToggleChange = (event) => {
     const checked = event.target.checked
-    setShowNa(checked)
-    reportRange({ range: value, showNa: checked })
+    setData({ ...data, showNa: checked })
+    reportRange({ range: data.value, showNa: checked })
   }
 
   const renderNaToggle = () => {
@@ -55,7 +54,7 @@ const YearRangeSlider = (props) => {
       const naSwitch = <Switch
         color="primary"
         size="small"
-        checked={ showNa }
+        checked={ data.showNa }
         onChange={ handleNaToggleChange }
       />
       return (
@@ -72,7 +71,7 @@ const YearRangeSlider = (props) => {
       <div className="px-3">
         <Slider
           className="mb-2"
-          value={value}
+          value={data.value}
           onChange={handleChange}
           valueLabelDisplay="auto"
           min={minRange}
