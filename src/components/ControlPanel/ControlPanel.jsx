@@ -104,62 +104,56 @@ export default class ControlPanel extends React.Component {
   handleYearChange(payload) {
     const { range, showNa } = payload
     const numYears = range[1] - range[0] + 1
-    let years = Array.from({ length: numYears }, (v, i) => i + range[0])
+    let years = Array.from({length: numYears}, (v, i) => i + range[0])
     if (showNa)
       years.push(null)
     this.updateFilters('year', years)
   }
 
   render() {
-    const displayToggle =
-      <ButtonToggle
-        fields={this.state.defaults.display}
-        onChange={this.handleDisplayControl}
-      />
-    const schoolTypeMultiCheckbox = 
-      <MultiCheckbox
-        fields={this.state.defaults.schoolTypes}
-        onChange={this.handleSchoolTypeFilter}
-      />
-    const schoolBoardMultiCheckbox =
-      <MultiCheckbox
-        fields={this.state.defaults.schoolBoards}
-        onChange={this.handleSchoolBoardFilter}
-      />
-    const sortSelect = (
-      <SingleSelect 
-        fields={this.state.defaults.sortBy}
-        onChange={this.handleSortByControl}
-      />
-    )
-    const fullYearRange = [1900, 2021]
-    const yearIncrement = 10
-    const yearSlider = (
-      <YearRangeSlider
-        initRange={ fullYearRange }
-        increment={ yearIncrement }
-        naToggle={ true }
-        onChange={ this.handleYearChange }
-      />
-    )
     const renderFilters = () => {
       if (!this.state.collapsed) {
         return (
           <div>
             <h3 className="title is-3">Controls</h3>
-            <InlineControl label="Display" control={ displayToggle } />
-            <InlineControl
-              label={ this.isMap() ? 'Color by' : 'Sort by' }
-              control={ sortSelect } />
-            <Control label="School Type" control={ schoolTypeMultiCheckbox }/>
-            <Control label="School Board" control={ schoolBoardMultiCheckbox }/>
-            <Control label="Year" control={ yearSlider }/>
+            <InlineControl label="Display">
+              <ButtonToggle
+                fields={this.state.defaults.display}
+                onChange={this.handleDisplayControl}
+              />
+            </InlineControl>
+            <InlineControl label={this.isMap() ? 'Color by' : 'Sort by'}>
+              <SingleSelect
+                fields={this.state.defaults.sortBy}
+                onChange={this.handleSortByControl}
+              />
+            </InlineControl>
+            <Control label="School Type">
+              <MultiCheckbox
+                fields={this.state.defaults.schoolTypes}
+                onChange={this.handleSchoolTypeFilter}
+              />
+            </Control>
+            <Control label="School Board">
+              <MultiCheckbox
+                fields={this.state.defaults.schoolBoards}
+                onChange={this.handleSchoolBoardFilter}
+              />
+            </Control>
+            <Control label="Year">
+              <YearRangeSlider
+                initRange={[1900, 2021]}
+                increment={10}
+                naToggle={true}
+                onChange={this.handleYearChange}
+              />
+            </Control>
           </div>
         )
       }
     }
     return (
-      <div className={ 'ControlPanel' + (this.state.collapsed ? ' collapsed' : '') }>
+      <div className={'ControlPanel' + (this.state.collapsed ? ' collapsed' : '')}>
         <div className="column">
           { renderFilters() }
           <FontAwesomeIcon
