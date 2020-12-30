@@ -9,6 +9,7 @@ import InlineControl from '../InlineControl'
 import MultiCheckbox from '../MultiCheckbox'
 import ButtonToggle from '../ButtonToggle'
 import SingleSelect from '../SingleSelect'
+import YearRangeSlider from '../YearRangeSlider'
 
 
 export default class ControlPanel extends React.Component {
@@ -47,6 +48,7 @@ export default class ControlPanel extends React.Component {
     this.selectedValsFromMultiCheckBoxFields = this.selectedValsFromMultiCheckBoxFields.bind(this)
     this.handleSchoolTypeFilter = this.handleSchoolTypeFilter.bind(this)
     this.handleSchoolBoardFilter = this.handleSchoolBoardFilter.bind(this)
+    this.handleYearChange = this.handleYearChange.bind(this)
   }
 
   toggle() {
@@ -99,6 +101,12 @@ export default class ControlPanel extends React.Component {
     this.updateControls('sortBy', selectedValue)
   }
 
+  handleYearChange(range) {
+    const numYears = range[1] - range[0] + 1
+    const years = Array.from({ length: numYears }, (v, i) => i + range[0])
+    this.updateFilters('year', years)
+  }
+
   render() {
     const displayToggle =
       <ButtonToggle
@@ -121,6 +129,15 @@ export default class ControlPanel extends React.Component {
         onChange={this.handleSortByControl}
       />
     )
+    const fullYearRange = [1900, 2021]
+    const yearIncrement = 10
+    const yearSlider = (
+      <YearRangeSlider
+        initRange={ fullYearRange }
+        increment={ yearIncrement }
+        onChange={ this.handleYearChange }
+      />
+    )
     const renderFilters = () => {
       if (!this.state.collapsed) {
         return (
@@ -132,6 +149,7 @@ export default class ControlPanel extends React.Component {
               control={ sortSelect } />
             <Control label="School Type" control={ schoolTypeMultiCheckbox }/>
             <Control label="School Board" control={ schoolBoardMultiCheckbox }/>
+            <Control label="Year" control={ yearSlider }/>
           </div>
         )
       }
