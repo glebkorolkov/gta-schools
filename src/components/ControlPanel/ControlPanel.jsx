@@ -37,7 +37,7 @@ export default class ControlPanel extends React.Component {
         ]
       },
       filters: {},
-      controls: {sortBy: 'type'}
+      controls: {}
     }
     this.toggle = this.toggle.bind(this)
     this.isMap = this.isMap.bind(this)

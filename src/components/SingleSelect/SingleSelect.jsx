@@ -4,7 +4,16 @@ import PropTypes from 'prop-types'
 
 const SingleSelect = (props) => {
 
-  const [value, setValue] = React.useState(props.selectedValue)
+  let initSelected = props.selectedValue
+  if (!initSelected && props.fields.length)
+    initSelected = props.fields[0].value || props.fields[0].label
+
+  const [value, setValue] = React.useState(initSelected)
+
+  const { onChange } = props
+  React.useEffect(() => {
+    onChange(initSelected)
+  }, [initSelected, onChange])
 
   const renderOption = (field, i) => {
     return (
@@ -39,12 +48,12 @@ SingleSelect.propTypes = {
         PropTypes.number
       ])
     })
-  ),
+  ).isRequired,
   selectedValue: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string
   ]),
-  onChange: PropTypes.func
+  onChange: PropTypes.func.isRequired
 }
 
 
