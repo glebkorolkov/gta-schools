@@ -21,4 +21,22 @@
     color: $blue;
   }
 
+  .MuiSwitch-colorPrimary.Mui-checked {
+    color: $blue;
+  }
+
+  .MuiSwitch-root.MuiSwitch-sizeSmall {
+    height: 20px;
+    width: 36px;
+
+    .MuiSwitch-thumb {
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  .MuiFormControlLabel-label {
+    font-size: 0.75rem;
+  }
+
 }

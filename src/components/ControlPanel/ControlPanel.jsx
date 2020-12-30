@@ -101,9 +101,12 @@ export default class ControlPanel extends React.Component {
     this.updateControls('sortBy', selectedValue)
   }
 
-  handleYearChange(range) {
+  handleYearChange(payload) {
+    const { range, showNa } = payload
     const numYears = range[1] - range[0] + 1
-    const years = Array.from({ length: numYears }, (v, i) => i + range[0])
+    let years = Array.from({ length: numYears }, (v, i) => i + range[0])
+    if (showNa)
+      years.push(null)
     this.updateFilters('year', years)
   }
 
@@ -135,6 +138,7 @@ export default class ControlPanel extends React.Component {
       <YearRangeSlider
         initRange={ fullYearRange }
         increment={ yearIncrement }
+        naToggle={ true }
         onChange={ this.handleYearChange }
       />
     )
