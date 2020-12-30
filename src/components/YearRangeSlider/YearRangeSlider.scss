@@ -1,0 +1,24 @@
+@import '../../../node_modules/bulma/sass/utilities/initial-variables.sass';
+
+
+.range-slider {
+
+  .MuiSlider-markLabel {
+    font-size: 0.5rem;
+    font-family: inherit;
+  }
+
+  .MuiSlider-valueLabel {
+    font-size: 0.6rem;
+    font-family: inherit;
+  }
+
+  .MuiSlider-thumb {
+    background-color: $blue;
+  }
+
+  .MuiSlider-root {
+    color: $blue;
+  }
+
+}
