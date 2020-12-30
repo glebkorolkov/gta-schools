@@ -102,6 +102,7 @@ export default class ControlPanel extends React.Component {
   }
 
   handleYearChange(payload) {
+    console.log(payload)
     const { range, showNa } = payload
     const numYears = range[1] - range[0] + 1
     let years = Array.from({length: numYears}, (v, i) => i + range[0])
