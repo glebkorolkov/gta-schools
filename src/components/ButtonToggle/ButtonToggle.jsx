@@ -13,8 +13,8 @@ export default class ButtonToggle extends React.Component {
   }
 
   componentDidMount() {
-    const { fields } = this.props
-    this.setState({ fields })
+    const {fields} = this.props
+    this.setState({fields})
     this.props.onChange(fields)
   }
 
@@ -24,10 +24,10 @@ export default class ButtonToggle extends React.Component {
       classNames += ' is-selected is-info'
     return (
       <button
-        key={ i }
-        className={ classNames }
-        onClick={ () => this.handleClick(i) }>
-          { field.label }
+        key={i}
+        className={classNames}
+        onClick={() => this.handleClick(i)}>
+          {field.label}
       </button>
     )
   }
@@ -36,14 +36,14 @@ export default class ButtonToggle extends React.Component {
     let fields = this.state.fields
     fields.forEach(field => {field.selected = false})
     fields[optionInd].selected = true
-    this.setState({ fields: fields })
+    this.setState({fields: fields})
     this.props.onChange(fields)
   }
 
   render() {
     return (
       <div className="buttons has-addons">
-        { this.state.fields.map((field, i) => this.renderOption(field, i)) }
+        {this.state.fields.map((field, i) => this.renderOption(field, i))}
       </div>
     )
   }
