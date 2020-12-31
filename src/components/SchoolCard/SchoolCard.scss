@@ -1,0 +1,18 @@
+@import '../../../node_modules/bulma/sass/utilities/initial-variables.sass';
+
+
+.school-card {
+
+    &.box {
+      border-radius: 4px;
+    }
+
+    .is-6_5 {
+      font-size: 0.85rem;
+    }
+
+    hr {
+      background-color: $grey-lighter;
+      height: 1px;
+    }
+}
