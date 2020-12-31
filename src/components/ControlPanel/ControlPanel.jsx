@@ -25,7 +25,8 @@ export default class ControlPanel extends React.Component {
         ],
         sortBy: [
           {label: 'School Type', value: 'type'},
-          {label: 'School Board', value: 'school_board'}
+          {label: 'School Board', value: 'school_board'},
+          {label: 'Year', value: 'year'}
         ],
         schoolTypes: [
           {label: 'Elementary', checked: true},

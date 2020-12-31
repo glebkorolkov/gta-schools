@@ -2,7 +2,7 @@ import React from 'react'
 import './App.scss'
 import SchoolMap from './components/SchoolMap'
 import ControlPanel from './components/ControlPanel'
-import * as d3 from "d3-scale-chromatic"
+import {makeColorFunc} from './utils/color'
 
 
 class App extends React.Component {
@@ -39,35 +39,7 @@ class App extends React.Component {
   }
 
   makeColorFunc() {
-    const nullColor = 'gray'
-    let colorFunc = (val) => null
-    const field = this.state.controls.sortBy
-    if (!field) return colorFunc
-    const fieldVals = this.state.schools.map(school => school[field])
-    const fieldRange = [...new Set(fieldVals)]
-      .sort()
-      .filter(item => item !== null)
-    const numericScale = fieldRange.find(item => isNaN(item)) === undefined
-    if (numericScale) {
-      colorFunc = (school) => {
-        const fieldVal = school[field]
-        if (fieldVal === null)
-          return nullColor
-        const fieldValNorm = (fieldVal - fieldRange[0]) / fieldRange[1]
-        return d3.interpolateRdYlGn(fieldValNorm)
-      }
-    } else {
-      colorFunc = (school) => {
-        const fieldVal = school[field]
-        if (fieldVal === null) {
-          console.log(school.name)
-          return nullColor
-        }
-        const fieldValNorm = fieldRange.indexOf(fieldVal) / (fieldRange.length - 1)
-        return d3.interpolateRdYlGn(fieldValNorm)
-      }
-    }
-    return colorFunc
+    return makeColorFunc(this.state.schools, this.state.controls.sortBy)
   }
 
   handleFilterChange(filters) {

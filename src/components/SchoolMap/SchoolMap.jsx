@@ -39,9 +39,10 @@ export class GoogleMapContainer extends React.Component {
               icon={{
                 path: "M-10,0a10,10 0 1,0 20,0a10,10 0 1,0 -20,0",
                 fillColor: this.buildColor(school),
-                fillOpacity: .6,
+                fillOpacity: .75,
                 anchor: new this.props.google.maps.Point(0, 0),
-                strokeWeight: 0,
+                strokeWeight: 1,
+                strokeColor: this.buildColor(school),
                 scale: .75
               }}
             />)
