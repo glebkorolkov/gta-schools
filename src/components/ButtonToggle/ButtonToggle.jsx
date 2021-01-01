@@ -21,7 +21,7 @@ export default class ButtonToggle extends React.Component {
   renderOption(field, i) {
     let classNames = 'button is-small'
     if (field.selected)
-      classNames += ' is-selected is-info'
+      classNames += ' is-selected is-link'
     return (
       <button
         key={i}
