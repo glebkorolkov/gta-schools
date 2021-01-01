@@ -19,6 +19,17 @@ export class GoogleMapContainer extends React.Component {
     this.handleMapClick = this.handleMapClick.bind(this)
   }
 
+  componentDidUpdate(prevProps) {
+    const selectedSchool = this.state.selectedSchool
+    const isThatSchool = (school, refSchool) => (
+        school.school_board === refSchool.school_board &&
+        school.name === refSchool.name)
+    if (selectedSchool &&
+        !this.props.schools.find(school => isThatSchool(school, selectedSchool))) {
+      this.setState({selectedSchool: null})
+    }
+  }
+
   buildColor(school) {
     const defaultColor = '#FF0000'
     return this.props.colorFunc(school) || defaultColor
