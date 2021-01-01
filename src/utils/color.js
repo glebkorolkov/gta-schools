@@ -1,4 +1,6 @@
 import * as d3 from "d3-scale-chromatic"
+import _get from 'lodash.get'
+
 
 const NULL_COLOR = 'gray'
 
@@ -6,7 +8,7 @@ const makeContiColorFunc = (range, field) => {
   const rangeStart = range[0]
   const rangeEnd = range[range.length - 1]
   return (item) => {
-    const fieldVal = item[field]
+    const fieldVal = _get(item, field, null)
     if (fieldVal === null)
       return NULL_COLOR
     const fieldValNorm = (fieldVal - rangeStart) / (rangeEnd - rangeStart)
@@ -16,7 +18,7 @@ const makeContiColorFunc = (range, field) => {
 
 const makeCatColorFunc = (range, field) => {
   return (item) => {
-    const fieldVal = item[field]
+    const fieldVal = _get(item, field, null)
     if (fieldVal === null) {
       return NULL_COLOR
     }
@@ -26,7 +28,7 @@ const makeCatColorFunc = (range, field) => {
 
 const makeMultiCatColorFunc = (range, field) => {
   return (item) => {
-    const fieldVal = item[field]
+    const fieldVal = _get(item, field, null)
     if (fieldVal === null) {
       return NULL_COLOR
     }
@@ -39,7 +41,7 @@ const makeColorFunc = (data, field) => {
   let colorFunc = (val) => null
   if (!field)
     return colorFunc
-  const fieldVals = data.map(item => item[field])
+  const fieldVals = data.map(item => _get(item, field, null))
   const fieldRange = [...new Set(fieldVals)]
     .sort()
     .filter(item => item !== null)

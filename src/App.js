@@ -1,4 +1,6 @@
 import React from 'react'
+import _get from 'lodash.get'
+
 import './App.scss'
 import SchoolMap from './components/SchoolMap'
 import ControlPanel from './components/ControlPanel'
@@ -33,7 +35,7 @@ class App extends React.Component {
     let schools = this.state.schools
     for (const key in this.state.filters) {
       const filterFunc = this.state.filters[key]
-      schools = schools.filter(school => filterFunc(school[key]))
+      schools = schools.filter(school => filterFunc(_get(school, key, null)))
     }
     return schools
   }
