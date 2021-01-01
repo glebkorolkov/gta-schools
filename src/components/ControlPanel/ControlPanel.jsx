@@ -9,7 +9,7 @@ import InlineControl from '../InlineControl'
 import MultiCheckbox from '../MultiCheckbox'
 import ButtonToggle from '../ButtonToggle'
 import SingleSelect from '../SingleSelect'
-import YearRangeSlider from '../YearRangeSlider'
+import RangeSlider from '../RangeSlider'
 
 
 export default class ControlPanel extends React.Component {
@@ -37,7 +37,10 @@ export default class ControlPanel extends React.Component {
         schoolBoards: [
           { label: 'Toronto DSB', checked: true, value: 'TDSB' },
           { label: 'York Region DSB', checked: false, value: 'YRDSB' }
-        ]
+        ],
+        year: {
+          range: [1950, 2021]
+        }
       },
       filters: {},
       controls: {}
@@ -143,10 +146,11 @@ export default class ControlPanel extends React.Component {
             />
           </Control>
           <Control label="Year">
-            <YearRangeSlider
-              initRange={[1950, 2021]}
+            <RangeSlider
+              initRange={this.state.defaults.year.range}
               increment={10}
               naToggle={true}
+              naToggleLabel="Include schools without year"
               onChange={this.handleYearChange}
             />
           </Control>

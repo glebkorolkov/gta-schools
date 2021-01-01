@@ -6,27 +6,27 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 import _debounce from 'lodash.debounce'
 
-import './YearRangeSlider.scss'
+import './RangeSlider.scss'
 
 
-const YearRangeSlider = (props) => {
+const RangeSlider = (props) => {
 
   const [data, setData] = React.useState({value: props.initRange, showNa: props.naToggle})
   const [initData] = React.useState({value: props.initRange, showNa: props.naToggle})
 
-  const round5Up = x => Math.ceil(x / 5) * 5
-  const round5Down = x => Math.floor(x / 5) * 5
+  const fullRange = props.fullRange || props.initRange
+  const minRange = fullRange[0]
+  const maxRange = fullRange[1]
 
-  const minRange = round5Down(props.initRange[0])
-  const maxRange = round5Up(props.initRange[1])
 
-  const increment = props.increment || 10
-
-  const numYears = parseInt((maxRange - minRange) / increment) + 1
-  const markYears = Array.from({ length: numYears }, (v, i) => i * increment + minRange)
-  const makeShortLabel = year => `'${("00" + (year % 100)).substr(-2, 2)}`
-  const makeLabel = props.shortLabel ? makeShortLabel : (y) => y.toString()
-  const yearMarks = markYears.map(year => { return { value: year, label: makeLabel(year) } })
+  const increment = props.increment
+  let marks = null
+  if (increment) {
+    const numMarks = parseInt((maxRange - minRange) / increment) + 1
+    const markVals = Array.from({ length: numMarks }, (v, i) => i * increment + minRange)
+    const makeLabel = props.labelFormattingFunc || (y => y.toString())
+    marks = markVals.map(val => { return { value: val, label: makeLabel(val) } })
+  }
 
   const reportRange = (val) => props.onChange(val)
   const debounceMs = props.debounce || 1000
@@ -59,8 +59,8 @@ const YearRangeSlider = (props) => {
       />
       return (
         <FormControlLabel
-          control={ naSwitch }
-          label = "Include schools without year"
+          control={naSwitch}
+          label={props.naToggleLabel || 'Include null values'}
         />
       )
     }
@@ -76,7 +76,7 @@ const YearRangeSlider = (props) => {
           valueLabelDisplay="auto"
           min={minRange}
           max={maxRange}
-          marks={yearMarks}
+          marks={marks}
         />
         { renderNaToggle() }
       </div>
@@ -85,14 +85,16 @@ const YearRangeSlider = (props) => {
 }
 
 
-YearRangeSlider.propTypes = {
+RangeSlider.propTypes = {
   initRange: PropTypes.arrayOf(PropTypes.number).isRequired,
+  fullRange: PropTypes.arrayOf(PropTypes.number),
   increment: PropTypes.number,
-  shortLabel: PropTypes.bool,
+  labelFormattingFunc: PropTypes.func,
   naToggle: PropTypes.bool,
+  naToggleLabel: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   debounce: PropTypes.number
 }
 
 
-export default YearRangeSlider
+export default RangeSlider
