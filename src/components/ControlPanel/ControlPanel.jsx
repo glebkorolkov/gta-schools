@@ -75,12 +75,12 @@ export default class ControlPanel extends React.Component {
 
   handleSchoolTypeFilter(fields) {
     const includeVals = this.selectedValsFromMultiCheckBoxFields(fields)
-    this.updateFilters('type', includeVals)
+    this.updateFilters('type', val => includeVals.includes(val))
   }
 
   handleSchoolBoardFilter(fields) {
     const includeVals = this.selectedValsFromMultiCheckBoxFields(fields)
-    this.updateFilters('school_board', includeVals)
+    this.updateFilters('school_board', val => includeVals.includes(val))
   }
 
   updateControls(key, val) {
@@ -103,13 +103,12 @@ export default class ControlPanel extends React.Component {
   }
 
   handleYearChange(payload) {
-    console.log(payload)
     const { range, showNa } = payload
-    const numYears = range[1] - range[0] + 1
-    let years = Array.from({length: numYears}, (v, i) => i + range[0])
-    if (showNa)
-      years.push(null)
-    this.updateFilters('year', years)
+    this.updateFilters('year', val => {
+      const isBetween = (val <= range[range.length - 1] && val >= range[0])
+      const isNull = (val === null)
+      return showNa ? isBetween || isNull : isBetween
+    })
   }
 
   render() {

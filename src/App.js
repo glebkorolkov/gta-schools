@@ -32,8 +32,8 @@ class App extends React.Component {
       return []
     let schools = this.state.schools
     for (const key in this.state.filters) {
-      const vals = this.state.filters[key]
-      schools = schools.filter(school => vals.includes(school[key]))
+      const filterFunc = this.state.filters[key]
+      schools = schools.filter(school => filterFunc(school[key]))
     }
     return schools
   }
