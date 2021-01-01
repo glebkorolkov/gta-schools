@@ -55,6 +55,7 @@ export default class ControlPanel extends React.Component {
     this.handleSchoolTypeFilter = this.handleSchoolTypeFilter.bind(this)
     this.handleSchoolBoardFilter = this.handleSchoolBoardFilter.bind(this)
     this.handleYearChange = this.handleYearChange.bind(this)
+    this.updateRangeFilter = this.updateRangeFilter.bind(this)
   }
 
   toggle() {
@@ -108,8 +109,12 @@ export default class ControlPanel extends React.Component {
   }
 
   handleYearChange(payload) {
+    this.updateRangeFilter(payload, 'year')
+  }
+
+  updateRangeFilter(payload, field) {
     const { range, showNa } = payload
-    this.updateFilters('year', val => {
+    this.updateFilters(field, val => {
       const isBetween = (val <= range[range.length - 1] && val >= range[0])
       const isNull = (val === null)
       return showNa ? isBetween || isNull : isBetween
