@@ -113,45 +113,43 @@ export default class ControlPanel extends React.Component {
 
   render() {
     const renderFilters = () => {
-      if (!this.state.collapsed) {
-        return (
-          <div>
-            <h3 className="title is-3">Controls</h3>
-            <InlineControl label="Display">
-              <ButtonToggle
-                fields={this.state.defaults.display}
-                onChange={this.handleDisplayControl}
-              />
-            </InlineControl>
-            <InlineControl label={this.isMap() ? 'Color by' : 'Sort by'}>
-              <SingleSelect
-                fields={this.state.defaults.sortBy}
-                onChange={this.handleSortByControl}
-              />
-            </InlineControl>
-            <Control label="School Type">
-              <MultiCheckbox
-                fields={this.state.defaults.schoolTypes}
-                onChange={this.handleSchoolTypeFilter}
-              />
-            </Control>
-            <Control label="School Board">
-              <MultiCheckbox
-                fields={this.state.defaults.schoolBoards}
-                onChange={this.handleSchoolBoardFilter}
-              />
-            </Control>
-            <Control label="Year">
-              <YearRangeSlider
-                initRange={[1900, 2021]}
-                increment={10}
-                naToggle={true}
-                onChange={this.handleYearChange}
-              />
-            </Control>
-          </div>
-        )
-      }
+      return (
+        <div className={this.state.collapsed ? 'is-hidden' : null}>
+          <h3 className="title is-3">Controls</h3>
+          <InlineControl label="Display">
+            <ButtonToggle
+              fields={this.state.defaults.display}
+              onChange={this.handleDisplayControl}
+            />
+          </InlineControl>
+          <InlineControl label={this.isMap() ? 'Color by' : 'Sort by'}>
+            <SingleSelect
+              fields={this.state.defaults.sortBy}
+              onChange={this.handleSortByControl}
+            />
+          </InlineControl>
+          <Control label="School Type">
+            <MultiCheckbox
+              fields={this.state.defaults.schoolTypes}
+              onChange={this.handleSchoolTypeFilter}
+            />
+          </Control>
+          <Control label="School Board">
+            <MultiCheckbox
+              fields={this.state.defaults.schoolBoards}
+              onChange={this.handleSchoolBoardFilter}
+            />
+          </Control>
+          <Control label="Year">
+            <YearRangeSlider
+              initRange={[1900, 2021]}
+              increment={10}
+              naToggle={true}
+              onChange={this.handleYearChange}
+            />
+          </Control>
+        </div>
+      )
     }
     return (
       <div className={'ControlPanel' + (this.state.collapsed ? ' collapsed' : '')}>
