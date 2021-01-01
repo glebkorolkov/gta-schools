@@ -80,6 +80,11 @@ export class GoogleMapContainer extends React.Component {
         <div className="school-info">
           <SchoolCard school={this.state.selectedSchool} />
         </div>
+        <div className="school-counter">
+          <span className="tag is-light">
+            Showing {this.props.schools.length} schools
+          </span>
+        </div>
       </div>
     )
   }
