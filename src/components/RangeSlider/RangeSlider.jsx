@@ -70,13 +70,13 @@ const RangeSlider = (props) => {
     <div className="range-slider">
       <div className="px-3">
         <Slider
-          className="mb-2"
           value={data.value}
           onChange={handleChange}
           valueLabelDisplay="auto"
           min={minRange}
           max={maxRange}
           marks={marks}
+          step={props.step}
         />
         { renderNaToggle() }
       </div>
@@ -89,6 +89,7 @@ RangeSlider.propTypes = {
   initRange: PropTypes.arrayOf(PropTypes.number).isRequired,
   fullRange: PropTypes.arrayOf(PropTypes.number),
   increment: PropTypes.number,
+  step: PropTypes.number,
   labelFormattingFunc: PropTypes.func,
   naToggle: PropTypes.bool,
   naToggleLabel: PropTypes.string,
