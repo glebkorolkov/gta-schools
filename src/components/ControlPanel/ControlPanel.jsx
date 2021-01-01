@@ -40,6 +40,11 @@ export default class ControlPanel extends React.Component {
         ],
         year: {
           range: [1950, 2021]
+        },
+        fraser: {
+          score: {
+            range: [0, 10]
+          }
         }
       },
       filters: {},
@@ -55,6 +60,7 @@ export default class ControlPanel extends React.Component {
     this.handleSchoolTypeFilter = this.handleSchoolTypeFilter.bind(this)
     this.handleSchoolBoardFilter = this.handleSchoolBoardFilter.bind(this)
     this.handleYearChange = this.handleYearChange.bind(this)
+    this.handleFraserScoreChange = this.handleFraserScoreChange.bind(this)
     this.updateRangeFilter = this.updateRangeFilter.bind(this)
   }
 
@@ -112,6 +118,10 @@ export default class ControlPanel extends React.Component {
     this.updateRangeFilter(payload, 'year')
   }
 
+  handleFraserScoreChange(payload) {
+    this.updateRangeFilter(payload, 'fraser.score')
+  }
+
   updateRangeFilter(payload, field) {
     const { range, showNa } = payload
     this.updateFilters(field, val => {
@@ -157,6 +167,16 @@ export default class ControlPanel extends React.Component {
               naToggle={true}
               naToggleLabel="Include schools without year"
               onChange={this.handleYearChange}
+            />
+          </Control>
+          <Control label="Fraser Score">
+            <RangeSlider
+              initRange={this.state.defaults.fraser.score.range}
+              increment={1.0}
+              step={.5}
+              naToggle={true}
+              naToggleLabel="Include schools without Fraser score"
+              onChange={this.handleFraserScoreChange}
             />
           </Control>
         </div>
