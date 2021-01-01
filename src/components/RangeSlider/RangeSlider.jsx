@@ -70,6 +70,7 @@ const RangeSlider = (props) => {
     <div className="range-slider">
       <div className="px-3">
         <Slider
+          className="mb-1"
           value={data.value}
           onChange={handleChange}
           valueLabelDisplay="auto"
