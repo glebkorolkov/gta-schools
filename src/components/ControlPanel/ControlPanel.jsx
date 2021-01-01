@@ -144,7 +144,7 @@ export default class ControlPanel extends React.Component {
           </Control>
           <Control label="Year">
             <YearRangeSlider
-              initRange={[1900, 2021]}
+              initRange={[1950, 2021]}
               increment={10}
               naToggle={true}
               onChange={this.handleYearChange}
