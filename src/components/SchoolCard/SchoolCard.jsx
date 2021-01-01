@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleLeft, faAngleDown, faMap, faMapMarkerAlt, faGlobe }
   from '@fortawesome/free-solid-svg-icons'
+import _padStart from 'lodash.padstart'
 
 import './SchoolCard.scss'
 
@@ -19,7 +20,6 @@ const SchoolCard = (props) => {
   if (!school) return ''
 
   const nDash = '\u2013'
-  const gradesLabel = school.grades ? `${school.grades.start}${nDash}${school.grades.end}` : nDash
 
   const quickFacts = (
     <nav className="level my-2">
@@ -76,6 +76,15 @@ const SchoolCard = (props) => {
     </div>
   )
 
+  const makeGradesLabel = grades => {
+    const formatGrade = (grade) => (isNaN(grade) ? grade : _padStart(grade, 2, '0'))
+    if (Array.isArray(grades))
+      return `${formatGrade(grades[0])}${nDash}${formatGrade(grades[1])}`
+    else if ('start' in grades && 'end' in grades)
+      return `${formatGrade(grades.start)}${nDash}${formatGrade(grades.end)}`
+    return nDash
+  }
+
   const schoolTypeTag = (
     <div className="level-item">
       <div className="tags has-addons">
@@ -83,7 +92,7 @@ const SchoolCard = (props) => {
           className={'tag ' + (school.type === 'Elementary' ? 'is-light' : 'is-dark')}>
           {school.type}
         </span>
-        <span className="tag is-info">{gradesLabel}</span>
+        <span className="tag is-info">{makeGradesLabel(school.grades)}</span>
       </div>
     </div>
   )
