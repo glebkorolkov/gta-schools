@@ -12,7 +12,9 @@ const makeContiColorFunc = (range, field) => {
     if (fieldVal === null)
       return NULL_COLOR
     const fieldValNorm = (fieldVal - rangeStart) / (rangeEnd - rangeStart)
-    return d3.interpolateWarm(fieldValNorm)
+    const lowerAdj = 0.4
+    const fieldValAdj = fieldValNorm * (1 - lowerAdj) + lowerAdj
+    return d3.interpolateWarm(fieldValAdj)
   }
 }
 
@@ -33,7 +35,9 @@ const makeMultiCatColorFunc = (range, field) => {
       return NULL_COLOR
     }
     const fieldValNorm = range.indexOf(fieldVal) / (range.length - 1)
-    return d3.interpolateWarm(fieldValNorm)
+    const lowerAdj = 0.4
+    const fieldValAdj = fieldValNorm * (1 - lowerAdj) + lowerAdj
+    return d3.interpolateWarm(fieldValAdj)
   }
 }
 
