@@ -22,10 +22,13 @@ export default class ButtonToggle extends React.Component {
     let classNames = 'button is-small'
     if (field.selected)
       classNames += ' is-selected is-link'
+    if (this.props.isNarrow)
+      classNames += ' px-2'
     return (
       <button
         key={i}
         className={classNames}
+        title={field.title}
         onClick={() => this.handleClick(i)}>
           {field.label}
       </button>
@@ -53,8 +56,9 @@ export default class ButtonToggle extends React.Component {
 
 ButtonToggle.propTypes = {
   fields: PropTypes.arrayOf(
-    PropTypes.exact({
+    PropTypes.shape({
       label: PropTypes.string,
+      title: PropTypes.string,
       selected: PropTypes.bool,
       value: PropTypes.oneOfType([
         PropTypes.string,
@@ -62,5 +66,6 @@ ButtonToggle.propTypes = {
       ])
     })
   ),
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  isNarror: PropTypes.bool
 }
