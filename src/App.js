@@ -5,6 +5,8 @@ import './App.scss'
 import SchoolMap from './components/SchoolMap'
 import ControlPanel from './components/ControlPanel'
 import {makeColorFunc} from './utils/color'
+import {sortNullsLast} from './utils'
+
 
 
 class App extends React.Component {
@@ -44,6 +46,12 @@ class App extends React.Component {
     return makeColorFunc(this.state.schools, this.state.controls.sortBy)
   }
 
+  makeSortFunc() {
+    const field = this.state.controls.sortBy
+    const order = this.state.controls.sortByOrder
+    return (collection) => sortNullsLast(collection, field, order)
+  }
+
   handleFilterChange(filters) {
     this.setState({ filters: filters })
   }
@@ -53,16 +61,18 @@ class App extends React.Component {
   }
 
   renderSchools() {
-    if (this.state.controls.display === 'map')
-      return (
-        <SchoolMap
-          zoom={12}
-          schools={this.getFilteredSchools()}
-          colorFunc={this.makeColorFunc()}
-        />
-      )
-    else
-      return <p>List placeholder</p>
+    const mapView = this.state.controls.display === 'map'
+    return (
+      <React.Fragment>
+        <div className={!mapView ? 'is-hidden' : null}>
+          <SchoolMap
+            zoom={12}
+            schools={this.getFilteredSchools()}
+            colorFunc={this.makeColorFunc()}
+          />
+        </div>
+      </React.Fragment>
+    )
   }
 
   render() {

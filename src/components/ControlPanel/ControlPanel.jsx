@@ -54,6 +54,7 @@ export default class ControlPanel extends React.Component {
     this.isMap = this.isMap.bind(this)
     this.handleDisplayControl = this.handleDisplayControl.bind(this)
     this.handleSortByControl = this.handleSortByControl.bind(this)
+    this.handleSortByOrderControl = this.handleSortByOrderControl.bind(this)
     this.updateFilters = this.updateFilters.bind(this)
     this.updateControls = this.updateControls.bind(this)
     this.selectedValsFromMultiCheckBoxFields = this.selectedValsFromMultiCheckBoxFields.bind(this)
@@ -114,6 +115,14 @@ export default class ControlPanel extends React.Component {
     this.updateControls('sortBy', selectedValue)
   }
 
+  handleSortByOrderControl(fields) {
+    const selectedVals = fields
+      .filter(field => field.selected)
+      .map(field => (field.value || field.label))
+    const selectedVal = selectedVals[0] || null
+    this.updateControls('sortByOrder', selectedVal)
+  }
+
   handleYearChange(payload) {
     this.updateRangeFilter(payload, 'year')
   }
@@ -147,6 +156,16 @@ export default class ControlPanel extends React.Component {
               fields={this.state.defaults.sortBy}
               onChange={this.handleSortByControl}
             />
+            <span className={'ml-1 ' + (this.isMap() ? 'is-hidden' : '')}>
+              <ButtonToggle
+                fields={[
+                  { label: '\u2191', title: 'Descending', value: 'desc', selected: true },
+                  { label: '\u2193', title: 'Ascending', value: 'asc', selected: false }
+                ]}
+                onChange={this.handleSortByOrderControl}
+                isNarrow={true}
+              />
+            </span>
           </InlineControl>
           <Control label="School Type">
             <MultiCheckbox
