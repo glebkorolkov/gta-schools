@@ -5,8 +5,7 @@ import './App.scss'
 import SchoolMap from './components/SchoolMap'
 import SchoolList from './components/SchoolList'
 import ControlPanel from './components/ControlPanel'
-import {makeColorFunc} from './utils/color'
-import {sortNullsLast} from './utils'
+import {sortNullsLast, makeColorFunc} from './utils'
 
 
 

@@ -1,5 +1,7 @@
 import _get from 'lodash.get';
 
+import {makeColorFunc} from './color'
+
 
 const sortNullsLast = (arr, keyPath, order) => {
   order = order || 'asc';
@@ -18,4 +20,4 @@ const sortNullsLast = (arr, keyPath, order) => {
 };
 
 
-export {sortNullsLast};
+export {sortNullsLast, makeColorFunc};
