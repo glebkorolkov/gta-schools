@@ -10,7 +10,9 @@ import './SchoolCard.scss'
 
 const SchoolCard = (props) => {
 
-  const [collapsed, setCollapsed] = React.useState(false)
+  const [collapsed, setCollapsed] = React.useState(props.collapsed || false)
+
+  React.useEffect(() => {setCollapsed(props.collapsed)}, [props]);
 
   const toggle = () => {
     setCollapsed(!collapsed)
@@ -97,15 +99,42 @@ const SchoolCard = (props) => {
     </div>
   )
 
+  const makeFraserTag = (school) => {
+    let colorClass = 'is-light'
+    let label = `Fr. ${nDash}`
+    if (school.fraser) {
+      const score = school.fraser.score
+      if (score >= 7.5)
+        colorClass = 'is-success'
+      else if (score < 7.5 && score >= 5.0)
+        colorClass = 'is-warning'
+      else
+        colorClass = 'is-danger'
+      label = `Fr. #${school.fraser.rank} (${school.fraser.score.toFixed(1)})`
+    }
+    return (
+      <div className="tags has-addons">
+        <span className={'tag ' + colorClass}>{label}</span>
+      </div>
+    )
+  }
+
+  const fraserTagItem = !collapsed ? '' : (
+    <span className="ml-4">
+      {makeFraserTag(school)}
+    </span>
+  )
+
   return (
     <div className="box p-4 school-card">
       <div className="level m-0">
         <div className="level-left">
           <div className="level-item pr-6">
-            <p className="title is-6">{school.name}</p>
+            <span className="title is-6">{school.name}</span>{fraserTagItem}
           </div>
         </div>
         <div className="level-right">
+          {/* {fraserTagItem} */}
           <div className="level-item">
             <small className="is-6_5">
               <FontAwesomeIcon icon={faMapMarkerAlt} />  {school.address.city}
@@ -129,7 +158,8 @@ const SchoolCard = (props) => {
 
 
 SchoolCard.propTypes = {
-  school: PropTypes.object
+  school: PropTypes.object,
+  collapsed: PropTypes.bool
 }
 
 
