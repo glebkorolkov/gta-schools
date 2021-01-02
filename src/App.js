@@ -2,7 +2,7 @@ import React from 'react'
 import _get from 'lodash.get'
 
 import './App.scss'
-import SchoolMap from './components/SchoolMap'
+import SchoolMap from './components/SchoolMap2'
 import SchoolList from './components/SchoolList'
 import ControlPanel from './components/ControlPanel'
 import {sortNullsLast, makeColorFunc} from './utils'
@@ -66,18 +66,16 @@ class App extends React.Component {
       <React.Fragment>
         <div className={!mapView ? 'is-hidden' : null}>
           <SchoolMap
-            zoom={12}
             schools={this.getFilteredSchools()}
-            colorFunc={this.makeColorFunc()}
           />
         </div>
-        <div className={mapView ? 'is-hidden' : null}>
+        {/* <div className={mapView ? 'is-hidden' : null}>
           <SchoolList
             className={mapView ? 'is-hidden' : null}
             schools={this.getFilteredSchools()}
             sortFunc={this.makeSortFunc()}
           />
-        </div>
+        </div> */}
       </React.Fragment>
     )
   }
