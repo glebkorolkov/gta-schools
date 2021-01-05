@@ -76,6 +76,7 @@ class App extends React.Component {
             className={mapView ? 'is-hidden' : null}
             schools={this.getFilteredSchools()}
             sortFunc={this.makeSortFunc()}
+            pageSize={this.state.controls.pageSize}
           />
         </div>
       </React.Fragment>

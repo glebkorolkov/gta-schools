@@ -30,6 +30,13 @@ export default class ControlPanel extends React.Component {
           {label: 'Fraser Rank', value: 'fraser.rank'},
           {label: 'Fraser Score', value: 'fraser.score'}
         ],
+        pageSize: [
+          {label: '10', value: 10},
+          {label: '25', value: 25},
+          {label: '50', value: 50},
+          {label: '100', value: 100},
+        ],
+        pageSizeSelected: 25,
         schoolTypes: [
           {label: 'Elementary', checked: true},
           {label: 'Secondary', checked: true}
@@ -55,6 +62,7 @@ export default class ControlPanel extends React.Component {
     this.handleDisplayControl = this.handleDisplayControl.bind(this)
     this.handleSortByControl = this.handleSortByControl.bind(this)
     this.handleSortByOrderControl = this.handleSortByOrderControl.bind(this)
+    this.handlePageSizeControl = this.handlePageSizeControl.bind(this)
     this.updateFilters = this.updateFilters.bind(this)
     this.updateControls = this.updateControls.bind(this)
     this.selectedValsFromMultiCheckBoxFields = this.selectedValsFromMultiCheckBoxFields.bind(this)
@@ -115,6 +123,10 @@ export default class ControlPanel extends React.Component {
     this.updateControls('sortBy', selectedValue)
   }
 
+  handlePageSizeControl(selectedValue) {
+    this.updateControls('pageSize', selectedValue)
+  }
+
   handleSortByOrderControl(fields) {
     const selectedVals = fields
       .filter(field => field.selected)
@@ -166,6 +178,13 @@ export default class ControlPanel extends React.Component {
                 isNarrow={true}
               />
             </span>
+          </InlineControl>
+          <InlineControl label="Results per page" className={this.isMap() ? 'is-hidden': ''}>
+            <SingleSelect
+              fields={this.state.defaults.pageSize}
+              selectedValue={this.state.defaults.pageSizeSelected}
+              onChange={this.handlePageSizeControl}
+            />
           </InlineControl>
           <Control label="School Type">
             <MultiCheckbox

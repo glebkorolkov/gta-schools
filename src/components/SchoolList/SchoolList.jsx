@@ -2,16 +2,28 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import SchoolCard from '../SchoolCard';
+import Pagination from '../Pagination';
 import './SchoolList.scss';
 
 
 const SchoolList = (props) => {
 
+  const pageSize = parseInt(props.pageSize) || 25;
+
   const [collapsedHint, setCollapsedHint] = React.useState(false);
+  const [page, setPage] = React.useState(1);
 
   let sortedSchools = props.schools;
   if (props.sortFunc)
     sortedSchools = props.sortFunc(props.schools);
+
+  const numPages = Math.ceil(sortedSchools.length / pageSize) || 1;
+  if (page > numPages) {
+    setPage(numPages);
+  }
+  const displayStartIndex = (page - 1) * pageSize;
+  const displayEndIndex = displayStartIndex + pageSize;
+  const displaySchools = sortedSchools.slice(displayStartIndex, displayEndIndex)
 
   const renderCard = (school) => {
     return (
@@ -24,9 +36,13 @@ const SchoolList = (props) => {
   };
 
   const toggleCollapsed = (val) => {
-    setCollapsedHint(val)
-  }
-  
+    setCollapsedHint(val);
+  };
+
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
+
   return (
     <div className="school-list container is-fluid has-background-white-ter">
       <div className="column">
@@ -53,7 +69,21 @@ const SchoolList = (props) => {
             </div>
           </div>
         </div>
-        {sortedSchools.map(renderCard)}
+        <Pagination
+          current={page}
+          total={numPages}
+          onChange={handlePageChange}
+          className={'mb-4' + (!props.schools.length ? ' is-hidden' : '')}
+          size="small"
+          rounded={true} />
+        {displaySchools.map(renderCard)}
+        <Pagination
+          current={page}
+          total={numPages}
+          onChange={handlePageChange}
+          className={'mb-4' + (!props.schools.length ? ' is-hidden' : '')}
+          size="small"
+          rounded={true} />
       </div>
     </div>
   )
