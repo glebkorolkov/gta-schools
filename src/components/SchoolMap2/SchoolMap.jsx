@@ -67,13 +67,14 @@ export default class SchoolMap extends React.Component {
       (path) => path.map(
         (point) => [point.lon, point.lat]
       ));
+    const greenColor = '#48c774';
     return [{
       coords: selectedSchoolBoundaries,
       name: selectedSchool.name,
       style: {
-        strokeColor: '#48c774',
+        strokeColor: greenColor,
         strokeWidth: 2,
-        fillColor: '#48c77499'
+        fillColor: greenColor
       }
     }];
   }
