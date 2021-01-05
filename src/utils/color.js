@@ -1,4 +1,5 @@
-import * as d3 from "d3-scale-chromatic"
+import * as d3 from "d3-scale-chromatic";
+import * as d3Color from 'd3-color';
 import _get from 'lodash.get'
 
 
@@ -60,5 +61,10 @@ const makeColorFunc = (data, field) => {
   return colorFunc
 }
 
+const addOpacity = (color, opacity) => {
+  const rgbColor = d3Color.rgb(color);
+  rgbColor.opacity = opacity;
+  return rgbColor.rgb();
+}
 
-export { makeColorFunc }
+export { makeColorFunc, addOpacity }

@@ -27,6 +27,7 @@ class App extends React.Component {
     fetch("schools.json")
       .then(res => res.json())
       .then(schools => {
+        schools.forEach((school, i) => {school['id'] = i + 1})
         this.setState({ schools: schools })
       })
   }
@@ -61,21 +62,22 @@ class App extends React.Component {
   }
 
   renderSchools() {
-    const mapView = this.state.controls.display === 'map'
+    const mapView = !this.state.controls.display || this.state.controls.display === 'map'
     return (
       <React.Fragment>
         <div className={!mapView ? 'is-hidden' : null}>
           <SchoolMap
             schools={this.getFilteredSchools()}
+            colorFunc={this.makeColorFunc()}
           />
         </div>
-        {/* <div className={mapView ? 'is-hidden' : null}>
+        <div className={mapView ? 'is-hidden' : null}>
           <SchoolList
             className={mapView ? 'is-hidden' : null}
             schools={this.getFilteredSchools()}
             sortFunc={this.makeSortFunc()}
           />
-        </div> */}
+        </div>
       </React.Fragment>
     )
   }
