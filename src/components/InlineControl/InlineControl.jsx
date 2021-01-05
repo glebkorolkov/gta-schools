@@ -3,8 +3,17 @@ import PropTypes from 'prop-types'
 
 
 const InlineControl = (props) => {
+
+  const addPropClasses = (existingClasses) => {
+    let combinedClasses = existingClasses
+    if (props.className) {
+      combinedClasses += ` ${props.className}`
+    }
+    return combinedClasses
+  }
+
   return (
-    <div className="inline-control level mb-3">
+    <div className={addPropClasses('inline-control level mb-3')}>
       <div className="level-left">
         <div className="level-item">
           <h5 className="title is-6 control-title">{props.label}</h5>
@@ -23,7 +32,8 @@ const InlineControl = (props) => {
 
 InlineControl.propTypes = {
   label: PropTypes.string.isRequired,
-  control: PropTypes.element
+  control: PropTypes.element,
+  className: PropTypes.string
 }
 
 
