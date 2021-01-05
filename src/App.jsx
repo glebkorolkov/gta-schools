@@ -2,7 +2,7 @@ import React from 'react'
 import _get from 'lodash.get'
 
 import './App.scss'
-import SchoolMap from './components/SchoolMap2'
+import SchoolMap from './components/SchoolMap'
 import SchoolList from './components/SchoolList'
 import ControlPanel from './components/ControlPanel'
 import {sortNullsLast, makeColorFunc} from './utils'

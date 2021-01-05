@@ -7,7 +7,12 @@
 .school-map-container {
     position: relative;
     height: 100%;
-    background-color: lightblue;
+}
+
+.school-counter {
+    position: absolute;
+    top: .5rem;
+    left: 0.5rem;
 }
 
 .school-info {
@@ -15,10 +20,4 @@
     bottom: 1rem;
     left: 1rem;
     width: calc(100% - 2rem);
-}
-
-.school-counter {
-    position: absolute;
-    top: .5rem;
-    left: 0.5rem;
 }
