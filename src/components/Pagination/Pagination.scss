@@ -1,0 +1,10 @@
+.pagination {
+  .pagination-previous, .pagination-next, .pagination-link {
+    background-color: white;
+    cursor: pointer;
+  }
+
+  .pagination-link.is-current {
+    background-color: #3273dc;
+  }
+}
