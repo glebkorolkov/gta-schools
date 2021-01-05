@@ -10,7 +10,6 @@
     "d3-color": "^2.0.0",
     "d3-interpolate": "^2.0.1",
     "d3-scale-chromatic": "^2.0.0",
-    "google-maps-react": "^2.0.6",
     "lodash.debounce": "^4.0.8",
     "lodash.get": "^4.4.2",
     "lodash.padstart": "^4.6.1",
