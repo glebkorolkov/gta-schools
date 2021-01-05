@@ -12,8 +12,13 @@ const COLOR_INTERPOLATOR = d3Interpolate.piecewise(
 
 
 const makeContiColorFunc = (range, field) => {
-  const rangeStart = range[0]
-  const rangeEnd = range[range.length - 1]
+  const sortedRange = range.sort((a, b) => {
+    if (a < b) return -1;
+    else if (a > b) return 1;
+    return 0;
+  })
+  const rangeStart = sortedRange[0]
+  const rangeEnd = sortedRange[sortedRange.length - 1]
   return (item) => {
     const fieldVal = _get(item, field, null)
     if (fieldVal === null)
@@ -24,23 +29,25 @@ const makeContiColorFunc = (range, field) => {
 }
 
 const makeCatColorFunc = (range, field) => {
+  const sortedRange = range.sort()
   return (item) => {
     const fieldVal = _get(item, field, null)
     if (fieldVal === null) {
       return NULL_COLOR
     }
     const palette = d3ScaleChromatic.schemeCategory10
-    return palette[range.indexOf(fieldVal)]
+    return palette[sortedRange.indexOf(fieldVal)]
   }
 }
 
 const makeMultiCatColorFunc = (range, field) => {
+  const sortedRange = range.sort()
   return (item) => {
     const fieldVal = _get(item, field, null)
     if (fieldVal === null) {
       return NULL_COLOR
     }
-    const fieldValNorm = range.indexOf(fieldVal) / (range.length - 1)
+    const fieldValNorm = sortedRange.indexOf(fieldVal) / (sortedRange.length - 1)
     return COLOR_INTERPOLATOR(fieldValNorm)
   }
 }
@@ -51,7 +58,6 @@ const makeColorFunc = (data, field) => {
     return colorFunc
   const fieldVals = data.map(item => _get(item, field, null))
   const fieldRange = [...new Set(fieldVals)]
-    .sort()
     .filter(item => item !== null)
   // Field considered non-numeric if at least one non-numeric value found
   const numericScale = fieldRange.find(item => isNaN(item)) === undefined
