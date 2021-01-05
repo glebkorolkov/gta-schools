@@ -39,14 +39,16 @@ const SchoolList = (props) => {
           <div className="level-right">
             <div className="level-item">
               <button
-                className="button is-text is-small"
+                className="button is-rounded is-small"
                 onClick={() => toggleCollapsed(true)}>
                   Collapse all
               </button> 
+            </div>
+            <div className="level-item">
               <button
-                className="button is-text is-small"
+                className="button is-rounded is-small"
                 onClick={() => toggleCollapsed(false)}>
-                  Expand all
+                Expand all
               </button> 
             </div>
           </div>
