@@ -134,9 +134,9 @@ export default class ControlPanel extends React.Component {
   updateRangeFilter(payload, field) {
     const { range, showNa } = payload
     this.updateFilters(field, val => {
-      const isBetween = (val <= range[range.length - 1] && val >= range[0])
+      const isBetween = (val !== null && val <= range[range.length - 1] && val >= range[0])
       const isNull = (val === null)
-      return showNa ? isBetween || isNull : isBetween
+      return showNa ? (isBetween || isNull) : isBetween
     })
   }
 
