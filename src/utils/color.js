@@ -1,10 +1,15 @@
-import * as d3 from "d3-scale-chromatic";
 import * as d3Color from 'd3-color';
 import * as d3Interpolate from 'd3-interpolate';
-import _get from 'lodash.get'
+import * as d3ScaleChromatic from 'd3-scale-chromatic';
+import _get from 'lodash.get';
 
 
 const NULL_COLOR = 'gray'
+const COLOR_INTERPOLATOR = d3Interpolate.piecewise(
+  d3Interpolate.interpolateRgb.gamma(2.2),
+  ["red", "orange", "green"]
+)
+
 
 const makeContiColorFunc = (range, field) => {
   const rangeStart = range[0]
@@ -14,8 +19,7 @@ const makeContiColorFunc = (range, field) => {
     if (fieldVal === null)
       return NULL_COLOR
     const fieldValNorm = (fieldVal - rangeStart) / (rangeEnd - rangeStart)
-    const colorFunc = d3Interpolate.interpolateRgbBasis(["red", "orange", "green"])
-    return colorFunc(fieldValNorm)
+    return COLOR_INTERPOLATOR(fieldValNorm)
   }
 }
 
@@ -25,7 +29,8 @@ const makeCatColorFunc = (range, field) => {
     if (fieldVal === null) {
       return NULL_COLOR
     }
-    return d3.schemeCategory10[range.indexOf(fieldVal)]
+    const palette = d3ScaleChromatic.schemeCategory10
+    return palette[range.indexOf(fieldVal)]
   }
 }
 
@@ -36,8 +41,7 @@ const makeMultiCatColorFunc = (range, field) => {
       return NULL_COLOR
     }
     const fieldValNorm = range.indexOf(fieldVal) / (range.length - 1)
-    const colorFunc = d3Interpolate.interpolateRgbBasis(["red", "orange", "green"])
-    return colorFunc(fieldValNorm)
+    return COLOR_INTERPOLATOR(fieldValNorm)
   }
 }
 
