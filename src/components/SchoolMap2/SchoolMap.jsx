@@ -40,8 +40,8 @@ export default class SchoolMap extends React.Component {
   }
 
   makeSchoolMarkers() {
-    const fillOpacity = 0.75;
-    const borderColor = '#3273dc';
+    const fillOpacity = 0.85;
+    // const borderColor = '#3273dc';
     return (
       this.getSchools()
         .filter((school) => school.coords)
@@ -52,7 +52,7 @@ export default class SchoolMap extends React.Component {
           icon: {
             type: 'circle',
             radius: this.isSelectedSchool(school) ? 10 : 7,
-            strokeColor: borderColor,
+            strokeColor: this.buildColor(school, 1.0),
             strokeWidth: this.isSelectedSchool(school) ? 3 : 1,
             fillColor: this.buildColor(school, fillOpacity)
           }

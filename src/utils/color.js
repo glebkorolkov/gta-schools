@@ -1,5 +1,6 @@
 import * as d3 from "d3-scale-chromatic";
 import * as d3Color from 'd3-color';
+import * as d3Interpolate from 'd3-interpolate';
 import _get from 'lodash.get'
 
 
@@ -13,9 +14,8 @@ const makeContiColorFunc = (range, field) => {
     if (fieldVal === null)
       return NULL_COLOR
     const fieldValNorm = (fieldVal - rangeStart) / (rangeEnd - rangeStart)
-    const lowerAdj = 0.4
-    const fieldValAdj = fieldValNorm * (1 - lowerAdj) + lowerAdj
-    return d3.interpolateWarm(fieldValAdj)
+    const colorFunc = d3Interpolate.interpolateRgbBasis(["red", "orange", "green"])
+    return colorFunc(fieldValNorm)
   }
 }
 
@@ -36,9 +36,8 @@ const makeMultiCatColorFunc = (range, field) => {
       return NULL_COLOR
     }
     const fieldValNorm = range.indexOf(fieldVal) / (range.length - 1)
-    const lowerAdj = 0.4
-    const fieldValAdj = fieldValNorm * (1 - lowerAdj) + lowerAdj
-    return d3.interpolateWarm(fieldValAdj)
+    const colorFunc = d3Interpolate.interpolateRgbBasis(["red", "orange", "green"])
+    return colorFunc(fieldValNorm)
   }
 }
 
