@@ -74,7 +74,7 @@ export default class SchoolMap extends React.Component {
       style: {
         strokeColor: greenColor,
         strokeWidth: 2,
-        fillColor: greenColor
+        fillColor: addOpacity(greenColor, 0.3)
       }
     }];
   }
