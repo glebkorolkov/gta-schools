@@ -30,6 +30,11 @@ export default class ControlPanel extends React.Component {
           {label: 'Fraser Rank', value: 'fraser.rank'},
           {label: 'Fraser Score', value: 'fraser.score'}
         ],
+        sortByOrder: {
+          'year': 'desc',
+          'fraser.rank': 'asc',
+          'fraser.score': 'desc'
+        },
         pageSize: [
           {label: '10', value: 10},
           {label: '25', value: 25},
@@ -121,6 +126,8 @@ export default class ControlPanel extends React.Component {
 
   handleSortByControl(selectedValue) {
     this.updateControls('sortBy', selectedValue)
+    const sortOrder = this.state.defaults.sortByOrder[selectedValue] || 'asc'
+    this.updateControls('sortByOrder', sortOrder)
   }
 
   handlePageSizeControl(selectedValue) {
@@ -168,7 +175,7 @@ export default class ControlPanel extends React.Component {
               fields={this.state.defaults.sortBy}
               onChange={this.handleSortByControl}
             />
-            <span className={'ml-1 ' + (this.isMap() ? 'is-hidden' : '')}>
+            <span className={'ml-1 ' + (true ? 'is-hidden' : '')}>
               <ButtonToggle
                 fields={[
                   { label: '\u2191', title: 'Descending', value: 'desc', selected: true },

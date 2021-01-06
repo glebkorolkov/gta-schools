@@ -44,7 +44,11 @@ class App extends React.Component {
   }
 
   makeColorFunc() {
-    return makeColorFunc(this.state.schools, this.state.controls.sortBy)
+    return makeColorFunc(
+      this.state.schools,
+      this.state.controls.sortBy,
+      this.state.controls.sortByOrder
+    )
   }
 
   makeSortFunc() {
