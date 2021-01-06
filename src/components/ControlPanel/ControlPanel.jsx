@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons'
+import { faAngleDoubleLeft, faAngleDoubleRight, faInfoCircle} from '@fortawesome/free-solid-svg-icons'
 import './ControlPanel.scss'
 
 import Control from '../Control'
@@ -20,7 +20,8 @@ export default class ControlPanel extends React.Component {
       collapsed: false,
       filters: {},
       controls: {},
-      displayMode: props.displayMode
+      displayMode: props.displayMode,
+      aboutMode: false
     }
     this.defaults = {
       display: [
@@ -64,6 +65,7 @@ export default class ControlPanel extends React.Component {
       }
     }
     this.toggle = this.toggle.bind(this)
+    this.toggleAbout = this.toggleAbout.bind(this)
     this.isMap = this.isMap.bind(this)
     this.handleDisplayControl = this.handleDisplayControl.bind(this)
     this.handleSortByControl = this.handleSortByControl.bind(this)
@@ -87,6 +89,10 @@ export default class ControlPanel extends React.Component {
 
   toggle() {
     this.setState({collapsed: !this.state.collapsed})
+  }
+
+  toggleAbout() {
+    this.setState({aboutMode: !this.state.aboutMode});
   }
 
   isMap() {
@@ -183,83 +189,129 @@ export default class ControlPanel extends React.Component {
   }
 
   render() {
-    const renderFilters = () => {
-      return (
-        <div className={this.state.collapsed ? 'is-hidden' : null}>
-          <h3 className="title is-3">Controls</h3>
-          <InlineControl label="Display">
+    const filters = (
+      <div className={this.state.collapsed ? 'is-hidden' : null}>
+        <h3 className="title is-3">Controls</h3>
+        <InlineControl label="Display">
+          <ButtonToggle
+            fields={this.getDisplayToggleFields()}
+            onChange={this.handleDisplayControl}
+          />
+        </InlineControl>
+        <InlineControl label={this.isMap() ? 'Color by' : 'Sort by'}>
+          <SingleSelect
+            fields={this.defaults.sortBy}
+            onChange={this.handleSortByControl}
+          />
+          <span className={'ml-1 ' + (true ? 'is-hidden' : '')}>
             <ButtonToggle
-              fields={this.getDisplayToggleFields()}
-              onChange={this.handleDisplayControl}
+              fields={[
+                { label: '\u2191', title: 'Descending', value: 'desc', selected: true },
+                { label: '\u2193', title: 'Ascending', value: 'asc', selected: false }
+              ]}
+              onChange={this.handleSortByOrderControl}
+              isNarrow={true}
             />
-          </InlineControl>
-          <InlineControl label={this.isMap() ? 'Color by' : 'Sort by'}>
-            <SingleSelect
-              fields={this.defaults.sortBy}
-              onChange={this.handleSortByControl}
-            />
-            <span className={'ml-1 ' + (true ? 'is-hidden' : '')}>
-              <ButtonToggle
-                fields={[
-                  { label: '\u2191', title: 'Descending', value: 'desc', selected: true },
-                  { label: '\u2193', title: 'Ascending', value: 'asc', selected: false }
-                ]}
-                onChange={this.handleSortByOrderControl}
-                isNarrow={true}
-              />
-            </span>
-          </InlineControl>
-          <InlineControl label="Results per page" className={this.isMap() ? 'is-hidden': ''}>
-            <SingleSelect
-              fields={this.defaults.pageSize}
-              selectedValue={this.defaults.pageSizeSelected}
-              onChange={this.handlePageSizeControl}
-            />
-          </InlineControl>
-          <Control label="School Type">
-            <MultiCheckbox
-              fields={this.defaults.schoolTypes}
-              onChange={this.handleSchoolTypeFilter}
-            />
-          </Control>
-          <Control label="School Board">
-            <MultiCheckbox
-              fields={this.defaults.schoolBoards}
-              onChange={this.handleSchoolBoardFilter}
-            />
-          </Control>
-          <Control label="Year">
-            <RangeSlider
-              initRange={this.defaults.year.range}
-              increment={10}
-              naToggle={true}
-              naToggleLabel="Include schools without year"
-              onChange={this.handleYearChange}
-            />
-          </Control>
-          <Control label="Fraser Score">
-            <RangeSlider
-              initRange={this.defaults.fraser.score.range}
-              increment={1.0}
-              step={.5}
-              naToggle={true}
-              naToggleLabel="Include schools without Fraser score"
-              onChange={this.handleFraserScoreChange}
-            />
-          </Control>
-        </div>
-      )
-    }
-    return (
-      <div className={'ControlPanel' + (this.state.collapsed ? ' collapsed' : '')}>
-        <div className="column">
-          { renderFilters() }
-          <FontAwesomeIcon
-            className="toggle"
-            icon={this.state.collapsed ? faAngleDoubleRight : faAngleDoubleLeft}
-            onClick={this.toggle} />
-        </div>
+          </span>
+        </InlineControl>
+        <InlineControl label="Results per page" className={this.isMap() ? 'is-hidden': ''}>
+          <SingleSelect
+            fields={this.defaults.pageSize}
+            selectedValue={this.defaults.pageSizeSelected}
+            onChange={this.handlePageSizeControl}
+          />
+        </InlineControl>
+        <Control label="School Type">
+          <MultiCheckbox
+            fields={this.defaults.schoolTypes}
+            onChange={this.handleSchoolTypeFilter}
+          />
+        </Control>
+        <Control label="School Board">
+          <MultiCheckbox
+            fields={this.defaults.schoolBoards}
+            onChange={this.handleSchoolBoardFilter}
+          />
+        </Control>
+        <Control label="Year">
+          <RangeSlider
+            initRange={this.defaults.year.range}
+            increment={10}
+            naToggle={true}
+            naToggleLabel="Include schools without year"
+            onChange={this.handleYearChange}
+          />
+        </Control>
+        <Control label="Fraser Score">
+          <RangeSlider
+            initRange={this.defaults.fraser.score.range}
+            increment={1.0}
+            step={.5}
+            naToggle={true}
+            naToggleLabel="Include schools without Fraser score"
+            onChange={this.handleFraserScoreChange}
+          />
+        </Control>
       </div>
+    )
+    const containerClasses = (
+      'control-panel is-flex is-flex-direction-column is-justify-content-flex-end'
+      + (this.state.collapsed ? ' collapsed' : '')
+    );
+    const aboutModal = (
+      <div className={'modal' + (this.state.aboutMode ? ' is-active' : '')}>
+        <div className="modal-background"></div>
+        <div className="modal-content">
+          <div className="modal-card">
+            <header className="modal-card-head">
+              <p className="modal-card-title">About</p>
+              <button className="delete" aria-label="close" onClick={this.toggleAbout}></button>
+            </header>
+            <section className="modal-card-body content">
+              <p>This is an interactive map of schools in the Greater Toronto Area area.
+                The map is under development and may not contain all schools in the area.</p>
+              <p>Information for the map was collected from public sources available on the Internet:
+                school board websites, Fraser Institute website and others.</p>
+              <p><b>The information presented on the map may be incomplete or inaccurate</b>.
+                Do not rely on it and verify with respective schools and school boards before
+                making any decisions.</p>
+              <p>This is a private project that I work on in my free time. Please excuse any bugs
+                or inconsistencies, as well as a lack of a mobile-friendly version. I do not generate any
+                revenue from the website, including advertising revenue or revenue from placing advertising
+                networks' cookies on your computer.</p>
+            </section>
+          </div>
+        </div>
+        {/* <button
+          className="modal-close is-large"
+          aria-label="close"
+          onClick={this.toggleAbout}>
+        </button> */}
+      </div>
+    );
+    return (
+      <React.Fragment>
+        <div className={containerClasses}>
+          <div className="column">
+            { filters }
+            <FontAwesomeIcon
+              className="toggle"
+              icon={this.state.collapsed ? faAngleDoubleRight : faAngleDoubleLeft}
+              onClick={this.toggle} />
+          </div>
+          <div
+            className={'column control-panel-footer' + (this.state.collapsed ? ' has-text-centered' : '')}>
+            <span
+              className="info-marker"
+              title="About this page"
+              onClick={this.toggleAbout}>
+              <FontAwesomeIcon icon={faInfoCircle} size="lg"/>
+              {this.state.collapsed ? null : <span className="ml-1">About</span>}
+            </span>
+          </div>
+        </div>
+        {aboutModal}
+      </React.Fragment>
     )
   }
 }

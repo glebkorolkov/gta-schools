@@ -1,4 +1,4 @@
-.ControlPanel {
+.control-panel {
   min-width: 350px;
   min-height: 100vh;
   flex: 0;
@@ -23,4 +23,13 @@
     right: 1rem;
   }
 
+  .info-marker {
+    cursor: pointer;
+  }
+
+  .control-panel-footer {
+    width: 100%;
+    max-height: 3rem;
+    font-size: 0.85rem;
+  }
 }
