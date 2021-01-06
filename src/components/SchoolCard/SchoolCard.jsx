@@ -78,7 +78,7 @@ export default class SchoolCard extends React.Component {
       );
     }
     const focusBtn = this.props.onFocusClick && this.props.school.coords ? (
-      <div className="level-item is-justify-content-flex-end">
+      <div className="level-item">
         <button
           className="button is-small is-text"
           title="Zoom on map"
@@ -89,13 +89,17 @@ export default class SchoolCard extends React.Component {
     ) : null;
     return (
       <nav className="level">
-        <div className="level-item is-justify-content-flex-start">
-          <p className="is-size-7"><FontAwesomeIcon icon={faMap} /> {fullAddress}</p>
+        <div className="level-left">
+          <div className="level-item">
+            <p className="is-size-7"><FontAwesomeIcon icon={faMap} /> {fullAddress}</p>
+          </div>
+          <div className="level-item">
+            <p className="is-size-7"><FontAwesomeIcon icon={faGlobe} /> {webLink}</p>
+          </div>
         </div>
-        <div className="level-item is-justify-content-flex-start">
-          <p className="is-size-7"><FontAwesomeIcon icon={faGlobe} /> {webLink}</p>
+        <div className="level-right">
+          {focusBtn}
         </div>
-        {focusBtn}
       </nav>
     )
   }
