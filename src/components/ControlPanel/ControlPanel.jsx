@@ -269,9 +269,9 @@ export default class ControlPanel extends React.Component {
             </header>
             <section className="modal-card-body content">
               <p>This is an interactive map of schools in the Greater Toronto Area area.
-                The map is under development and may not contain all schools in the area.</p>
+                The map is under development and may not contain all schools from all school boards.</p>
               <p>Information for the map was collected from public sources available on the Internet:
-                school board websites, Fraser Institute website and others.</p>
+                school board websites, Fraser Institute's website and others.</p>
               <p><b>The information presented on the map may be incomplete or inaccurate</b>.
                 Do not rely on it and verify with respective schools and school boards before
                 making any decisions.</p>
