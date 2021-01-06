@@ -54,18 +54,18 @@ const SchoolList = (props) => {
           </div>
           <div className="level-right">
             <div className="level-item">
-              <button
-                className="button is-rounded is-small"
-                onClick={() => toggleCollapsed(true)}>
+              <div className="buttons has-addons">
+                <button
+                  className="button is-rounded is-small"
+                  onClick={() => toggleCollapsed(true)}>
                   Collapse all
-              </button> 
-            </div>
-            <div className="level-item">
-              <button
-                className="button is-rounded is-small"
-                onClick={() => toggleCollapsed(false)}>
-                Expand all
-              </button> 
+                </button>
+                <button
+                  className="button is-rounded is-small"
+                  onClick={() => toggleCollapsed(false)}>
+                  Expand all
+              </button>
+              </div>
             </div>
           </div>
         </div>
