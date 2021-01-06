@@ -5,6 +5,7 @@ import './App.scss'
 import SchoolMap from './components/SchoolMap'
 import SchoolList from './components/SchoolList'
 import ControlPanel from './components/ControlPanel'
+import MobilePlug from './components/MobilePlug'
 import {sortNullsLast, makeColorFunc} from './utils'
 
 
@@ -102,13 +103,18 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="App">
-        <ControlPanel
-          onFilterChange={this.handleFilterChange}
-          onControlChange={this.handleControlChange} 
-          displayMode={this.state.controls ? this.state.controls.display : null} />
-        { this.renderSchools() }
-      </div>
+      <React.Fragment>
+        <div className="app is-hidden-mobile">
+          <ControlPanel
+            onFilterChange={this.handleFilterChange}
+            onControlChange={this.handleControlChange}
+            displayMode={this.state.controls ? this.state.controls.display : null} />
+          {this.renderSchools()}
+        </div>
+        <div className="is-hidden-tablet mobile-plug-container">
+          <MobilePlug />
+        </div>
+      </React.Fragment>
     );
   }
 }

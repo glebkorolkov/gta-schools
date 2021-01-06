@@ -13,14 +13,18 @@ body::-webkit-scrollbar {
     display: none;
 }
 
-.App {
+.app {
   display: flex;
   width: 100%;
   // height: calc(100vh - calc(100vh - 100%));
   height: 100%;
 }
 
-.App > * {
+.app > * {
   min-height: 100%;
   width: 100%;
+}
+
+.mobile-plug-container {
+  height: 100%;
 }
