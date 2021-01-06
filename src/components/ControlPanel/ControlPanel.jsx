@@ -255,7 +255,7 @@ export default class ControlPanel extends React.Component {
       </div>
     )
     const containerClasses = (
-      'control-panel is-flex is-flex-direction-column is-justify-content-flex-end'
+      'control-panel is-flex is-flex-direction-column is-justify-content-flex-start'
       + (this.state.collapsed ? ' collapsed' : '')
     );
     const aboutModal = (
