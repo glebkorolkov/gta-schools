@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import OpenStreetMap from '../OpenStreetMap';
 import SchoolCard from '../SchoolCard';
 import {addOpacity} from '../../utils';
-import './SchoolMap.css';
+import './SchoolMap.scss';
 
 
 export default class SchoolMap extends React.Component {
