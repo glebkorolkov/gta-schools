@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleLeft, faAngleDown, faMap, faMapMarkerAlt, faGlobe }
+import { faAngleLeft, faAngleDown, faMap, faMapMarkerAlt, faGlobe, faCrosshairs }
   from '@fortawesome/free-solid-svg-icons'
 import _padStart from 'lodash.padstart'
 
@@ -77,6 +77,16 @@ export default class SchoolCard extends React.Component {
         </a>
       );
     }
+    const focusBtn = this.props.onFocusClick && this.props.school.coords ? (
+      <div className="level-item is-justify-content-flex-end">
+        <button
+          className="button is-small is-text"
+          title="Zoom on map"
+          onClick={() => this.props.onFocusClick(this.props.school.id)}>
+          <FontAwesomeIcon icon={faCrosshairs} />
+        </button>
+      </div>
+    ) : null;
     return (
       <nav className="level">
         <div className="level-item is-justify-content-flex-start">
@@ -85,6 +95,7 @@ export default class SchoolCard extends React.Component {
         <div className="level-item is-justify-content-flex-start">
           <p className="is-size-7"><FontAwesomeIcon icon={faGlobe} /> {webLink}</p>
         </div>
+        {focusBtn}
       </nav>
     )
   }
@@ -194,5 +205,6 @@ export default class SchoolCard extends React.Component {
 
 SchoolCard.propTypes = {
   school: PropTypes.object,
-  collapsed: PropTypes.bool
+  collapsed: PropTypes.bool,
+  onFocusClick: PropTypes.func
 };

@@ -25,12 +25,17 @@ const SchoolList = (props) => {
   const displayEndIndex = displayStartIndex + pageSize;
   const displaySchools = sortedSchools.slice(displayStartIndex, displayEndIndex)
 
+  const handleFocusClick = (schoolId) => {
+    props.onFocusClick(schoolId)
+  };
+
   const renderCard = (school) => {
     return (
       <SchoolCard
         school={school}
         key={`${school.school_board} - ${school.name}`}
         collapsed={collapsedHint}
+        onFocusClick={props.onFocusClick ? handleFocusClick : null}
       />
     );
   };
@@ -92,7 +97,8 @@ const SchoolList = (props) => {
 
 SchoolList.propTypes = {
   schools: PropTypes.arrayOf(PropTypes.object).isRequired,
-  sortFunc: PropTypes.func
+  sortFunc: PropTypes.func,
+  onFocusClick: PropTypes.func
 };
 
 

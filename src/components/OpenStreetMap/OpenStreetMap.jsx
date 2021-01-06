@@ -125,9 +125,21 @@ export default class OpenStreetMap extends React.Component {
     sizeObserver.observe(this.mapDiv);
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     this.renderMarkers();
     this.renderPolygons();
+    if (prevProps.zoom !== this.props.zoom ||
+        prevProps.center.lat !== this.props.center.lat ||
+        prevProps.center.lon !== this.props.center.lon) {
+        this.adjustZoomAndCenter();
+      }
+  }
+
+  adjustZoomAndCenter() {
+    const view = this.ol.map.getView();
+    view.setZoom(this.props.zoom || this.defaultZoom);
+    view.setCenter(fromLonLat([this.props.center.lon, this.props.center.lat]));
+    this.ol.map.setView(view);
   }
 
   handleHover(event) {

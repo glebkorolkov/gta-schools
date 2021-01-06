@@ -11,17 +11,28 @@ export default class SchoolMap extends React.Component {
 
   constructor(props) {
     super(props);
+    this.defaultZoom = 12;
+    this.focusZoom = 16;
     this.state = {
-      selectedSchool: null
+      selectedSchool: null,
+      mapZoom: this.defaultZoom,
+      mapCenter: {
+        lat: 43.741667,
+        lon: -79.373333
+      }
     };
     this.handleMarkerClick = this.handleMarkerClick.bind(this);
+    this.handleFocusClick = this.handleFocusClick.bind(this);
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     const selectedSchool = this.state.selectedSchool
     if (selectedSchool &&
       !this.props.schools.find((school) => school.id === selectedSchool.id)) {
       this.setState({ selectedSchool: null })
+    }
+    if (prevProps.focusedSchoolId !== this.props.focusedSchoolId) {
+      this.handleFocusClick(this.props.focusedSchoolId)
     }
   }
 
@@ -41,7 +52,6 @@ export default class SchoolMap extends React.Component {
 
   makeSchoolMarkers() {
     const fillOpacity = 0.85;
-    // const borderColor = '#3273dc';
     return (
       this.getSchools()
         .filter((school) => school.coords)
@@ -84,21 +94,29 @@ export default class SchoolMap extends React.Component {
     this.setState({ selectedSchool: selectedSchool });
   }
 
+  handleFocusClick(schoolId) {
+    const school = this.getSchools().find((school) => school.id === schoolId) || null;
+    this.setState({
+      selectedSchool: school,
+      mapZoom: this.focusZoom,
+      mapCenter: school.coords,
+    });
+  }
+
   render() {
     return (
       <div className="school-map-container">
         <OpenStreetMap
-          zoom={12}
           className="school-map"
-          center={{
-            lat: 43.741667,
-            lon: -79.373333
-          }}
+          zoom={this.state.mapZoom}
+          center={this.state.mapCenter}
           markers={this.makeSchoolMarkers()}
           polygons={this.makeSchoolAreaPolygons()}
           onMarkerClick={this.handleMarkerClick} />
         <div className="school-info">
-          <SchoolCard school={this.state.selectedSchool} />
+          <SchoolCard
+            school={this.state.selectedSchool}
+            onFocusClick={this.handleFocusClick} />
         </div>
         <div className="school-counter">
           <span className="tag is-light">
@@ -113,5 +131,6 @@ export default class SchoolMap extends React.Component {
 
 SchoolMap.propTypes = {
   schools: PropTypes.arrayOf(PropTypes.object).isRequired,
-  colorFunc: PropTypes.func
+  colorFunc: PropTypes.func,
+  focusedSchoolId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 }

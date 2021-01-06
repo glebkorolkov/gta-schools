@@ -18,49 +18,50 @@ export default class ControlPanel extends React.Component {
     super(props)
     this.state = {
       collapsed: false,
-      defaults: {
-        display: [
-          {label: 'Map', value: 'map', selected: true},
-          {label: 'List', value: 'list', selected: false}
-        ],
-        sortBy: [
-          {label: 'School Type', value: 'type'},
-          {label: 'School Board', value: 'school_board'},
-          {label: 'Year', value: 'year'},
-          {label: 'Fraser Rank', value: 'fraser.rank'},
-          {label: 'Fraser Score', value: 'fraser.score'}
-        ],
-        sortByOrder: {
-          'year': 'desc',
-          'fraser.rank': 'asc',
-          'fraser.score': 'desc'
-        },
-        pageSize: [
-          {label: '10', value: 10},
-          {label: '25', value: 25},
-          {label: '50', value: 50},
-          {label: '100', value: 100},
-        ],
-        pageSizeSelected: 25,
-        schoolTypes: [
-          {label: 'Elementary', checked: true},
-          {label: 'Secondary', checked: true}
-        ],
-        schoolBoards: [
-          { label: 'Toronto DSB', checked: true, value: 'TDSB' },
-          { label: 'York Region DSB', checked: false, value: 'YRDSB' }
-        ],
-        year: {
-          range: [1950, 2021]
-        },
-        fraser: {
-          score: {
-            range: [0, 10]
-          }
-        }
-      },
       filters: {},
-      controls: {}
+      controls: {},
+      displayMode: props.displayMode
+    }
+    this.defaults = {
+      display: [
+        { label: 'Map', value: 'map', selected: true },
+        { label: 'List', value: 'list', selected: false }
+      ],
+      sortBy: [
+        { label: 'School Type', value: 'type' },
+        { label: 'School Board', value: 'school_board' },
+        { label: 'Year', value: 'year' },
+        { label: 'Fraser Rank', value: 'fraser.rank' },
+        { label: 'Fraser Score', value: 'fraser.score' }
+      ],
+      sortByOrder: {
+        'year': 'desc',
+        'fraser.rank': 'asc',
+        'fraser.score': 'desc'
+      },
+      pageSize: [
+        { label: '10', value: 10 },
+        { label: '25', value: 25 },
+        { label: '50', value: 50 },
+        { label: '100', value: 100 },
+      ],
+      pageSizeSelected: 25,
+      schoolTypes: [
+        { label: 'Elementary', checked: true },
+        { label: 'Secondary', checked: true }
+      ],
+      schoolBoards: [
+        { label: 'Toronto DSB', checked: true, value: 'TDSB' },
+        { label: 'York Region DSB', checked: false, value: 'YRDSB' }
+      ],
+      year: {
+        range: [1950, 2021]
+      },
+      fraser: {
+        score: {
+          range: [0, 10]
+        }
+      }
     }
     this.toggle = this.toggle.bind(this)
     this.isMap = this.isMap.bind(this)
@@ -78,12 +79,34 @@ export default class ControlPanel extends React.Component {
     this.updateRangeFilter = this.updateRangeFilter.bind(this)
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.displayMode !== this.props.displayMode) {
+      this.setState({displayMode: this.props.displayMode});
+    }
+  }
+
   toggle() {
     this.setState({collapsed: !this.state.collapsed})
   }
 
   isMap() {
     return this.state.controls.display && this.state.controls.display.toLowerCase() === 'map'
+  }
+
+  getDisplayToggleFields() {
+    if (!this.state.displayMode) return this.defaults.display;
+    const displayFields = [...this.defaults.display];
+    displayFields.forEach((field) => {
+      field.selected = false;
+      if ((field.value && field.value === this.state.displayMode) ||
+          (field.label === this.state.displayMode)) {
+        field.selected = true;
+      }
+    });
+    if (!displayFields.map((field) => field.selected).includes(true)) {
+      return this.defaults.display;
+    }
+    return displayFields;
   }
 
   selectedValsFromMultiCheckBoxFields(fields) {
@@ -126,7 +149,7 @@ export default class ControlPanel extends React.Component {
 
   handleSortByControl(selectedValue) {
     this.updateControls('sortBy', selectedValue)
-    const sortOrder = this.state.defaults.sortByOrder[selectedValue] || 'asc'
+    const sortOrder = this.defaults.sortByOrder[selectedValue] || 'asc'
     this.updateControls('sortByOrder', sortOrder)
   }
 
@@ -166,13 +189,13 @@ export default class ControlPanel extends React.Component {
           <h3 className="title is-3">Controls</h3>
           <InlineControl label="Display">
             <ButtonToggle
-              fields={this.state.defaults.display}
+              fields={this.getDisplayToggleFields()}
               onChange={this.handleDisplayControl}
             />
           </InlineControl>
           <InlineControl label={this.isMap() ? 'Color by' : 'Sort by'}>
             <SingleSelect
-              fields={this.state.defaults.sortBy}
+              fields={this.defaults.sortBy}
               onChange={this.handleSortByControl}
             />
             <span className={'ml-1 ' + (true ? 'is-hidden' : '')}>
@@ -188,26 +211,26 @@ export default class ControlPanel extends React.Component {
           </InlineControl>
           <InlineControl label="Results per page" className={this.isMap() ? 'is-hidden': ''}>
             <SingleSelect
-              fields={this.state.defaults.pageSize}
-              selectedValue={this.state.defaults.pageSizeSelected}
+              fields={this.defaults.pageSize}
+              selectedValue={this.defaults.pageSizeSelected}
               onChange={this.handlePageSizeControl}
             />
           </InlineControl>
           <Control label="School Type">
             <MultiCheckbox
-              fields={this.state.defaults.schoolTypes}
+              fields={this.defaults.schoolTypes}
               onChange={this.handleSchoolTypeFilter}
             />
           </Control>
           <Control label="School Board">
             <MultiCheckbox
-              fields={this.state.defaults.schoolBoards}
+              fields={this.defaults.schoolBoards}
               onChange={this.handleSchoolBoardFilter}
             />
           </Control>
           <Control label="Year">
             <RangeSlider
-              initRange={this.state.defaults.year.range}
+              initRange={this.defaults.year.range}
               increment={10}
               naToggle={true}
               naToggleLabel="Include schools without year"
@@ -216,7 +239,7 @@ export default class ControlPanel extends React.Component {
           </Control>
           <Control label="Fraser Score">
             <RangeSlider
-              initRange={this.state.defaults.fraser.score.range}
+              initRange={this.defaults.fraser.score.range}
               increment={1.0}
               step={.5}
               naToggle={true}
@@ -244,5 +267,6 @@ export default class ControlPanel extends React.Component {
 
 ControlPanel.propTypes = {
   onFilterChange: PropTypes.func,
-  onControlChange: PropTypes.func
+  onControlChange: PropTypes.func,
+  displayMode: PropTypes.string
 }

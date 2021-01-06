@@ -15,11 +15,13 @@ class App extends React.Component {
     super(props)
     this.state = {
       schools: [],
+      focusedSchoolId: null,
       filters: null,
       controls: {}
     }
     this.handleFilterChange = this.handleFilterChange.bind(this)
     this.handleControlChange = this.handleControlChange.bind(this)
+    this.handleFocusClick = this.handleFocusClick.bind(this)
     this.renderSchools = this.renderSchools.bind(this)
   }
 
@@ -65,6 +67,15 @@ class App extends React.Component {
     this.setState({ controls: controls })
   }
 
+  handleFocusClick(schoolId) {
+    let controls = this.state.controls
+    if (controls.display !== 'map') {
+      controls.display = 'map'
+      this.setState({controls: controls})
+    }
+    this.setState({ focusedSchoolId: schoolId })
+  }
+
   renderSchools() {
     const mapView = !this.state.controls.display || this.state.controls.display === 'map'
     return (
@@ -73,6 +84,7 @@ class App extends React.Component {
           <SchoolMap
             schools={this.getFilteredSchools()}
             colorFunc={this.makeColorFunc()}
+            focusedSchoolId={this.state.focusedSchoolId}
           />
         </div>
         <div className={mapView ? 'is-hidden' : null}>
@@ -81,6 +93,7 @@ class App extends React.Component {
             schools={this.getFilteredSchools()}
             sortFunc={this.makeSortFunc()}
             pageSize={this.state.controls.pageSize}
+            onFocusClick={this.handleFocusClick}
           />
         </div>
       </React.Fragment>
@@ -92,7 +105,8 @@ class App extends React.Component {
       <div className="App">
         <ControlPanel
           onFilterChange={this.handleFilterChange}
-          onControlChange={this.handleControlChange} />
+          onControlChange={this.handleControlChange} 
+          displayMode={this.state.controls ? this.state.controls.display : null} />
         { this.renderSchools() }
       </div>
     );
