@@ -179,7 +179,7 @@ export default class SchoolCard extends React.Component {
       <div className="box p-4 school-card">
         <div className="level m-0">
           <div className="level-left">
-            <div className="level-item pr-6">
+            <div className="level-item">
               <span className="title is-6">{school.name}</span>{fraserTag}
             </div>
           </div>
