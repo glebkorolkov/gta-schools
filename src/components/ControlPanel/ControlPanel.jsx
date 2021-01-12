@@ -313,7 +313,7 @@ export default class ControlPanel extends React.Component {
         </div>
         {aboutModal}
         <button
-          className="button is-link mobile-toggle"
+          className={'button is-link mobile-toggle' + (!this.isMap() ? ' mobile-toggle-listview': '')}
           onClick={this.toggle}
           title="Toggle control panel" >
           <FontAwesomeIcon icon={faSlidersH} />
