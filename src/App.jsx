@@ -5,6 +5,7 @@ import './App.scss'
 import SchoolMap from './components/SchoolMap'
 import SchoolList from './components/SchoolList'
 import ControlPanel from './components/ControlPanel'
+import AboutPage from './components/AboutPage'
 import {sortNullsLast, makeColorFunc} from './utils'
 
 
@@ -22,7 +23,8 @@ class App extends React.Component {
       filters: null,
       controls: {},
       narrow: false,
-      superNarrow: false
+      superNarrow: false,
+      aboutActive: false
     }
     this.appDiv = null
     this.resizeObserverSet = false;
@@ -30,6 +32,8 @@ class App extends React.Component {
     this.handleFilterChange = this.handleFilterChange.bind(this)
     this.handleControlChange = this.handleControlChange.bind(this)
     this.handleFocusClick = this.handleFocusClick.bind(this)
+    this.handleAboutOpen = this.handleAboutOpen.bind(this)
+    this.handleAboutClose = this.handleAboutClose.bind(this)
     this.renderSchools = this.renderSchools.bind(this)
   }
 
@@ -107,6 +111,14 @@ class App extends React.Component {
     this.setState({ focusedSchoolId: schoolId })
   }
 
+  handleAboutOpen() {
+    this.setState({ aboutActive: true });
+  }
+
+  handleAboutClose() {
+    this.setState({aboutActive: false});
+  }
+
   renderSchools() {
     const mapView = !this.state.controls.display || this.state.controls.display === 'map'
     const cardWidth = this.state.superNarrow ? 'xs' : this.state.narrow ? 's' : 'm'
@@ -135,14 +147,24 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="app" ref={(elem) => this.appDiv = elem}>
-        <ControlPanel
-          onFilterChange={this.handleFilterChange}
-          onControlChange={this.handleControlChange}
-          displayMode={this.state.controls ? this.state.controls.display : null}
-          collapsed={this.state.narrow} />
-        {this.renderSchools()}
-      </div>
+      <React.Fragment>
+        <div
+          className={'app' + (this.state.aboutActive ? ' is-hidden' : '')}
+          ref={(elem) => this.appDiv = elem} >
+          <ControlPanel
+            onFilterChange={this.handleFilterChange}
+            onControlChange={this.handleControlChange}
+            onAboutClick={this.handleAboutOpen}
+            displayMode={this.state.controls ? this.state.controls.display : null}
+            collapsed={this.state.narrow}
+          />
+          {this.renderSchools()}
+        </div>
+        <AboutPage
+          className={!this.state.aboutActive ? ' is-hidden' : null}
+          onClose={this.handleAboutClose}
+        />
+      </React.Fragment>
     );
   }
 }

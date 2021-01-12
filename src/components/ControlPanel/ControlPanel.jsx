@@ -20,8 +20,7 @@ export default class ControlPanel extends React.Component {
       collapsed: this.props.collapsed || false,
       filters: {},
       controls: {},
-      displayMode: props.displayMode,
-      aboutMode: false
+      displayMode: props.displayMode
     }
     this.defaults = {
       display: [
@@ -95,7 +94,9 @@ export default class ControlPanel extends React.Component {
   }
 
   toggleAbout() {
-    this.setState({aboutMode: !this.state.aboutMode});
+    if (this.props.onAboutClick) {
+      this.props?.onAboutClick();
+    }
   }
 
   isMap() {
@@ -261,32 +262,6 @@ export default class ControlPanel extends React.Component {
       'control-panel is-flex is-flex-direction-column is-justify-content-flex-start'
       + (this.state.collapsed ? ' collapsed' : '')
     );
-    const aboutModal = (
-      <div className={'modal' + (this.state.aboutMode ? ' is-active' : '')}>
-        <div className="modal-background"></div>
-        <div className="modal-content">
-          <div className="modal-card">
-            <header className="modal-card-head">
-              <p className="modal-card-title">About</p>
-              <button className="delete" aria-label="close" onClick={this.toggleAbout}></button>
-            </header>
-            <section className="modal-card-body content">
-              <p>This is an interactive map of schools in the Greater Toronto Area area.
-                The map is under development and may not contain all schools from all school boards.</p>
-              <p>Information for the map was collected from public sources available on the Internet:
-                school board websites, Fraser Institute's website and others.</p>
-              <p><b>The information presented on the map may be incomplete or inaccurate</b>.
-                Do not rely on it and verify with respective schools and school boards before
-                making any decisions.</p>
-              <p>This is a private project that I work on in my free time. Please excuse any bugs
-                or inconsistencies, as well as a lack of a mobile-friendly version. I do not generate any
-                revenue from the website, including advertising revenue or revenue from placing advertising
-                networks' cookies on your computer.</p>
-            </section>
-          </div>
-        </div>
-      </div>
-    );
     return (
       <React.Fragment>
         <div className={containerClasses}>
@@ -311,7 +286,6 @@ export default class ControlPanel extends React.Component {
             </span>
           </div>
         </div>
-        {aboutModal}
         <button
           className={'button is-link mobile-toggle' + (!this.isMap() ? ' mobile-toggle-listview': '')}
           onClick={this.toggle}
@@ -327,6 +301,7 @@ export default class ControlPanel extends React.Component {
 ControlPanel.propTypes = {
   onFilterChange: PropTypes.func,
   onControlChange: PropTypes.func,
+  onAboutClick: PropTypes.func,
   displayMode: PropTypes.string,
   collapsed: PropTypes.bool
 }
