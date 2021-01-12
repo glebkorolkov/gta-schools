@@ -42,7 +42,7 @@ const AboutPage = (props) => {
               </p>
             </div>
             <div>
-              <button class="button is-link"
+              <button className="button is-link"
                 onClick={props.onClose}>
                 <FontAwesomeIcon icon={faTimes} className="mr-2" />
                 Close
