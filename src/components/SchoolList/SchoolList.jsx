@@ -35,6 +35,7 @@ const SchoolList = (props) => {
         school={school}
         key={`${school.school_board} - ${school.name}`}
         collapsed={collapsedHint}
+        width={props.cardWidth}
         onFocusClick={props.onFocusClick ? handleFocusClick : null}
       />
     );
@@ -98,6 +99,7 @@ const SchoolList = (props) => {
 SchoolList.propTypes = {
   schools: PropTypes.arrayOf(PropTypes.object).isRequired,
   sortFunc: PropTypes.func,
+  cardWidth: PropTypes.string,
   onFocusClick: PropTypes.func
 };
 
