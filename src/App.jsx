@@ -60,7 +60,7 @@ class App extends React.Component {
   }
 
   adjustLookOnResize(resizeEvent) {
-    const width = resizeEvent[0].borderBoxSize[0].inlineSize;
+    const width = resizeEvent[0].contentRect.width;
     const isNarrow = width < this.narrowThreshold;
     const isSuperNarrow = width < this.superNarrowThreshold;
     if ((isNarrow !== this.state.narrow) || (isSuperNarrow !== this.state.superNarrow)) {
