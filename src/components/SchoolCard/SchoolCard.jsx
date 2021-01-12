@@ -179,8 +179,8 @@ export default class SchoolCard extends React.Component {
       label = `Fr. #${school.fraser.rank} (${school.fraser.score.toFixed(1)})`;
     }
     let containerClasses = "tags has-addons"
-    if (['s', 'xs'].includes(this.props.width)) {
-      containerClasses += ' ml-3';
+    if (['m'].includes(this.props.width)) {
+      containerClasses += ' ml-2';
     }
     return (
       <div className={containerClasses}>
