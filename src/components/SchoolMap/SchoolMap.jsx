@@ -104,8 +104,13 @@ export default class SchoolMap extends React.Component {
   }
 
   render() {
+    let containerClasses = 'school-map-container'
+    if (this.props.className) {
+      containerClasses += ` ${this.props.className}`
+    }
+    const cardCollapsed = ['s', 'xs'].includes(this.props.cardWidth);
     return (
-      <div className="school-map-container">
+      <div className={containerClasses}>
         <OpenStreetMap
           className="school-map"
           zoom={this.state.mapZoom}
@@ -116,7 +121,9 @@ export default class SchoolMap extends React.Component {
         <div className="school-info">
           <SchoolCard
             school={this.state.selectedSchool}
-            onFocusClick={this.handleFocusClick} />
+            onFocusClick={this.handleFocusClick}
+            width={this.props.cardWidth}
+            collapsed={cardCollapsed}  />
         </div>
         <div className="school-counter">
           <span className="tag is-light">
@@ -132,5 +139,7 @@ export default class SchoolMap extends React.Component {
 SchoolMap.propTypes = {
   schools: PropTypes.arrayOf(PropTypes.object).isRequired,
   colorFunc: PropTypes.func,
-  focusedSchoolId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+  focusedSchoolId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  cardWidth: PropTypes.string,
+  className: PropTypes.string
 }
