@@ -68,11 +68,9 @@
     left: 1.5rem;
     z-index: 5;
 
-    @include tablet-only {
-      &.mobile-toggle-listview {
-        top: auto;
-        bottom: 2.5rem;
-      }
+    &.mobile-toggle-listview {
+      top: auto;
+      bottom: 2.5rem;
     }
   }
 }
