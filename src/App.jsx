@@ -5,12 +5,14 @@ import './App.scss'
 import SchoolMap from './components/SchoolMap'
 import SchoolList from './components/SchoolList'
 import ControlPanel from './components/ControlPanel'
-import MobilePlug from './components/MobilePlug'
 import {sortNullsLast, makeColorFunc} from './utils'
 
 
 
 class App extends React.Component {
+
+  narrowThreshold = 1012
+  superNarrowThreshold = 769
 
   constructor(props) {
     super(props)
@@ -18,8 +20,13 @@ class App extends React.Component {
       schools: [],
       focusedSchoolId: null,
       filters: null,
-      controls: {}
+      controls: {},
+      narrow: false,
+      superNarrow: false
     }
+    this.appDiv = null
+    this.resizeObserverSet = false;
+    this.adjustLookOnResize = this.adjustLookOnResize.bind(this)
     this.handleFilterChange = this.handleFilterChange.bind(this)
     this.handleControlChange = this.handleControlChange.bind(this)
     this.handleFocusClick = this.handleFocusClick.bind(this)
@@ -33,6 +40,29 @@ class App extends React.Component {
         schools.forEach((school, i) => {school['id'] = i + 1})
         this.setState({ schools: schools })
       })
+    this.setResizeObserver();
+  }
+
+  componentDidUpdate() {
+    this.setResizeObserver();
+  }
+
+  setResizeObserver() {
+    if (this.appDiv && !this.resizeObserverSet) {
+      const resizeObserver = new ResizeObserver(this.adjustLookOnResize);
+      resizeObserver.observe(this.appDiv);
+      this.resizeObserverSet = true;
+    }
+  }
+
+  adjustLookOnResize(resizeEvent) {
+    const width = resizeEvent[0].borderBoxSize[0].inlineSize;
+    const isNarrow = width < this.narrowThreshold;
+    const isSuperNarrow = width < this.superNarrowThreshold;
+    if ((isNarrow !== this.state.narrow) || (isSuperNarrow !== this.state.superNarrow)) {
+      this.setState({ narrow: isNarrow });
+      this.setState({ superNarrow: isSuperNarrow });
+    }
   }
 
   getFilteredSchools() {
@@ -79,22 +109,24 @@ class App extends React.Component {
 
   renderSchools() {
     const mapView = !this.state.controls.display || this.state.controls.display === 'map'
+    const cardWidth = this.state.superNarrow ? 'xs' : this.state.narrow ? 's' : 'm'
     return (
       <React.Fragment>
-        <div className={!mapView ? 'is-hidden' : null}>
+        <div className={'map-wrapper' + (!mapView ? ' is-hidden' : '')}>
           <SchoolMap
             schools={this.getFilteredSchools()}
             colorFunc={this.makeColorFunc()}
             focusedSchoolId={this.state.focusedSchoolId}
+            cardWidth={cardWidth}
           />
         </div>
-        <div className={mapView ? 'is-hidden' : null}>
+        <div className={'list-wrapper' + (mapView ? ' is-hidden' : '')}>
           <SchoolList
-            className={mapView ? 'is-hidden' : null}
             schools={this.getFilteredSchools()}
             sortFunc={this.makeSortFunc()}
             pageSize={this.state.controls.pageSize}
             onFocusClick={this.handleFocusClick}
+            cardWidth={cardWidth}
           />
         </div>
       </React.Fragment>
@@ -103,18 +135,14 @@ class App extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
-        <div className="app is-hidden-mobile">
-          <ControlPanel
-            onFilterChange={this.handleFilterChange}
-            onControlChange={this.handleControlChange}
-            displayMode={this.state.controls ? this.state.controls.display : null} />
-          {this.renderSchools()}
-        </div>
-        <div className="is-hidden-tablet mobile-plug-container">
-          <MobilePlug />
-        </div>
-      </React.Fragment>
+      <div className="app" ref={(elem) => this.appDiv = elem}>
+        <ControlPanel
+          onFilterChange={this.handleFilterChange}
+          onControlChange={this.handleControlChange}
+          displayMode={this.state.controls ? this.state.controls.display : null}
+          collapsed={this.state.narrow} />
+        {this.renderSchools()}
+      </div>
     );
   }
 }
