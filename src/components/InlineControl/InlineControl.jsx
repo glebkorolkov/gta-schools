@@ -13,7 +13,7 @@ const InlineControl = (props) => {
   }
 
   return (
-    <div className={addPropClasses('inline-control level mb-3')}>
+    <div className={addPropClasses('inline-control level is-mobile mb-3')}>
       <div className="level-left">
         <div className="level-item">
           <h5 className="title is-6 control-title">{props.label}</h5>
