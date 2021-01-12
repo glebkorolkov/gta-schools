@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleDoubleLeft, faAngleDoubleRight, faInfoCircle} from '@fortawesome/free-solid-svg-icons'
+import { faAngleDoubleLeft, faAngleDoubleRight, faInfoCircle, faSlidersH} from '@fortawesome/free-solid-svg-icons'
 import './ControlPanel.scss'
 
 import Control from '../Control'
@@ -17,7 +17,7 @@ export default class ControlPanel extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      collapsed: false,
+      collapsed: this.props.collapsed || false,
       filters: {},
       controls: {},
       displayMode: props.displayMode,
@@ -84,6 +84,9 @@ export default class ControlPanel extends React.Component {
   componentDidUpdate(prevProps) {
     if (prevProps.displayMode !== this.props.displayMode) {
       this.setState({displayMode: this.props.displayMode});
+    }
+    if (prevProps.collapsed !== this.props.collapsed) {
+      this.setState({collapsed: this.props.collapsed});
     }
   }
 
@@ -282,11 +285,6 @@ export default class ControlPanel extends React.Component {
             </section>
           </div>
         </div>
-        {/* <button
-          className="modal-close is-large"
-          aria-label="close"
-          onClick={this.toggleAbout}>
-        </button> */}
       </div>
     );
     return (
@@ -294,10 +292,13 @@ export default class ControlPanel extends React.Component {
         <div className={containerClasses}>
           <div className="column">
             { filters }
-            <FontAwesomeIcon
-              className="toggle"
-              icon={this.state.collapsed ? faAngleDoubleRight : faAngleDoubleLeft}
-              onClick={this.toggle} />
+            <div className="toggle">
+              <FontAwesomeIcon
+                className="toggle-icon"
+                icon={this.state.collapsed ? faAngleDoubleRight : faAngleDoubleLeft}
+                onClick={this.toggle}
+                title="Toggle control panel" />
+            </div>
           </div>
           <div
             className={'column control-panel-footer' + (this.state.collapsed ? ' has-text-centered' : '')}>
@@ -311,6 +312,12 @@ export default class ControlPanel extends React.Component {
           </div>
         </div>
         {aboutModal}
+        <button
+          className="button is-link mobile-toggle"
+          onClick={this.toggle}
+          title="Toggle control panel" >
+          <FontAwesomeIcon icon={faSlidersH} />
+        </button>
       </React.Fragment>
     )
   }
@@ -320,5 +327,6 @@ export default class ControlPanel extends React.Component {
 ControlPanel.propTypes = {
   onFilterChange: PropTypes.func,
   onControlChange: PropTypes.func,
-  displayMode: PropTypes.string
+  displayMode: PropTypes.string,
+  collapsed: PropTypes.bool
 }

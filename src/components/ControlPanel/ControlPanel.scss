@@ -1,3 +1,9 @@
+@import "~bulma/sass/utilities/functions";
+@import "~bulma/sass/utilities/initial-variables";
+@import "~bulma/sass/utilities/derived-variables";
+@import "~bulma/sass/utilities/mixins";
+
+
 .control-panel {
   min-width: 350px;
   height: 100%;
@@ -7,15 +13,27 @@
   border-right: solid 1px #e3e3e3;
 
   &.collapsed {
+    width: 50px;
     min-width: 50px;
-  }
 
-  .ControlPanelToggle:hover {
-    cursor: pointer;
+    @include until($desktop) {
+      width: 0px;
+      min-width: 0px;
+    }
   }
 
   .column {
     position: relative;
+  }
+
+  .control-panel-footer {
+    width: 100%;
+    max-height: 3rem;
+    font-size: 0.85rem;
+  }
+
+  .info-marker {
+    cursor: pointer;
   }
 
   .toggle {
@@ -24,13 +42,31 @@
     right: 1rem;
   }
 
-  .info-marker {
+  .toggle:hover {
     cursor: pointer;
   }
 
-  .control-panel-footer {
-    width: 100%;
-    max-height: 3rem;
-    font-size: 0.85rem;
+  @include until($desktop) {
+    position: absolute;
+    z-index: 10;
+    max-width: 350px;
+  }
+
+  @include mobile {
+    max-width: 100%;
+  }
+
+}
+
+.mobile-toggle {
+  display: none;
+
+  @include until($desktop) {
+    display: block;
+    position: fixed;
+    top: 2.5rem;
+    left: 1rem;
+    z-index: 5;
   }
 }
+
