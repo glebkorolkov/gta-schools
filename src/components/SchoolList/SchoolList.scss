@@ -1,4 +1,15 @@
+@import "~bulma/sass/utilities/functions";
+@import "~bulma/sass/utilities/initial-variables";
+@import "~bulma/sass/utilities/derived-variables";
+@import "~bulma/sass/utilities/mixins";
+
+
 .school-list {
   height: 100%;
   overflow-y: auto;
+
+  @include mobile {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
 }
