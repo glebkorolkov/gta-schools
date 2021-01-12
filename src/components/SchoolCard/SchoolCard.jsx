@@ -16,14 +16,29 @@ export default class SchoolCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      collapsed: props.collapsed || false
+      collapsed: props.collapsed || false,
+      narrow: false,
+      superNarrow: false
     };
     this.toggle = this.toggle.bind(this);
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidMount() {
+    this.updateNarrowFlags();
+  }
+
+  componentDidUpdate(prevProps) {
     if (prevProps.collapsed !== this.props.collapsed) {
-      this.setState({collapsed: this.props.collapsed})
+      this.setState({collapsed: this.props.collapsed});
+    }
+    this.updateNarrowFlags();
+  }
+
+  updateNarrowFlags() {
+    const isSuperNarrow = this.props.width === 'xs';
+    const isNarrow = this.props.width === 's' || isSuperNarrow;
+    if (this.state.narrow !== isNarrow || this.state.superNarrow !== isSuperNarrow) {
+      this.setState({narrow: isNarrow, superNarrow: isSuperNarrow});
     }
   }
 
@@ -32,8 +47,8 @@ export default class SchoolCard extends React.Component {
   }
 
   makeQuickFacts(school) {
-    return (
-      <nav className="level my-2">
+    const wideView = (
+      <nav className="level my-2 school-card-body">
         <div className="level-item has-text-centered">
           <div>
             <p className="heading">School Board</p>
@@ -61,7 +76,9 @@ export default class SchoolCard extends React.Component {
           </div>
         </div>
       </nav>
-    )
+    );
+    const narrowView = wideView;
+    return this.state.narrow ? narrowView : wideView;
   }
 
   makeExtraDetails(school) {
@@ -78,30 +95,40 @@ export default class SchoolCard extends React.Component {
       );
     }
     const focusBtn = this.props.onFocusClick && this.props.school.coords ? (
-      <div className="level-item">
-        <button
-          className="button is-small is-text"
-          title="Zoom on map"
-          onClick={() => this.props.onFocusClick(this.props.school.id)}>
-          <FontAwesomeIcon icon={faCrosshairs} />
-        </button>
-      </div>
+      <button
+        className="button is-small is-text"
+        title="Zoom on map"
+        onClick={() => this.props.onFocusClick(this.props.school.id)}>
+        <FontAwesomeIcon icon={faCrosshairs} />
+      </button>
     ) : null;
     return (
-      <nav className="level">
+      <nav className="level school-card-footer">
         <div className="level-left">
-          <div className="level-item">
-            <p className="is-size-7"><FontAwesomeIcon icon={faMap} /> {fullAddress}</p>
-          </div>
-          <div className="level-item">
-            <p className="is-size-7"><FontAwesomeIcon icon={faGlobe} /> {webLink}</p>
-          </div>
+          <span className="school-card-footer-item is-size-7 mr-3">
+            <FontAwesomeIcon icon={faMap} /> {fullAddress}
+          </span>
+          <span className="school-card-footer-item is-size-7">
+            <FontAwesomeIcon icon={faGlobe} /> {webLink}
+          </span>
         </div>
         <div className="level-right">
           {focusBtn}
         </div>
       </nav>
     )
+  }
+
+  makeCardBody(school) {
+    const narrow = this.state.narrow;
+    return this.state.collapsed ? null : (
+      <div className="school-card-content">
+        <hr className="my-2" />
+        {this.makeQuickFacts(school, narrow)}
+        <hr className="my-2" />
+        {this.makeExtraDetails(school, narrow)}
+      </div>
+    );
   }
 
   makeTypeGradesTag(school) {
@@ -117,15 +144,18 @@ export default class SchoolCard extends React.Component {
       return NDASH;
     };
 
+    const narrowReplace = {'Elementary': 'Elem.', 'Secondary': 'Sec.'};
+    const isSuperNarrowView = this.state.superNarrow && this.state.collapsed;
+    const narrowType = narrowReplace[school.type] || school.type;
+    const schoolType = isSuperNarrowView ? narrowType : school.type;
+
     return (
-      <div className="level-item">
-        <div className="tags has-addons">
-          <span
-            className={'tag ' + (school.type === 'Elementary' ? 'is-light' : 'is-dark')}>
-            {school.type}
-          </span>
-          <span className="tag is-info">{makeGradesLabel(school.grades)}</span>
-        </div>
+      <div className="tags has-addons">
+        <span
+          className={'tag ' + (school.type === 'Elementary' ? 'is-light' : 'is-dark')}>
+          {schoolType}
+        </span>
+        <span className="tag is-info">{makeGradesLabel(school.grades)}</span>
       </div>
     )
   }
@@ -148,36 +178,27 @@ export default class SchoolCard extends React.Component {
       }
       label = `Fr. #${school.fraser.rank} (${school.fraser.score.toFixed(1)})`;
     }
+    let containerClasses = "tags has-addons"
+    if (['s', 'xs'].includes(this.props.width)) {
+      containerClasses += ' ml-3';
+    }
     return (
-      <span className="ml-4">
-        <div className="tags has-addons">
-          <span className={'tag ' + colorClass}>{label}</span>
-        </div>
-      </span>
+      <div className={containerClasses}>
+        <span className={'tag ' + colorClass}>{label}</span>
+      </div>
     );
   }
 
   render() {
     const school = this.props.school;
     if (!school) return null;
-    // Body parts
-    const quickFacts = this.makeQuickFacts(school);
-    const extraDetails = this.makeExtraDetails(school);
-    const cardBody = this.state.collapsed ? null : (
-      <div className="school-card-content">
-        <hr className="my-2" />
-        {quickFacts}
-        <hr className="my-2" />
-        {extraDetails}
-      </div>
-    );
-    // Header parts
+
     const typeGradesTag = this.makeTypeGradesTag(school);
     const fraserTag = this.makeFraserTag(school);
 
-    return (
-      <div className="box p-4 school-card">
-        <div className="level m-0">
+    const wideView = (
+      <React.Fragment>
+        <div className="level is-mobile m-0">
           <div className="level-left">
             <div className="level-item">
               <span className="title is-6">{school.name}</span>{fraserTag}
@@ -185,11 +206,9 @@ export default class SchoolCard extends React.Component {
           </div>
           <div className="level-right">
             <div className="level-item">
-              <small className="is-6_5">
+              <small className="is-6_5 mr-3">
                 <FontAwesomeIcon icon={faMapMarkerAlt} />  {school.address.city}
               </small>
-            </div>
-            <div className="level-item">
               {typeGradesTag}
             </div>
             <div className="level-item">
@@ -200,7 +219,48 @@ export default class SchoolCard extends React.Component {
             </div>
           </div>
         </div>
-        {cardBody}
+        {this.makeCardBody(school, false)}
+      </React.Fragment>
+    );
+
+    const narrowView = (
+      <React.Fragment>
+        <div className="level is-mobile mb-2 school-card-header">
+          <div className="level-left">
+              <span className="title is-6">{school.name}</span>
+          </div>
+          <div className="level-right">
+              <FontAwesomeIcon
+                className="toggle"
+                icon={this.state.collapsed ? faAngleLeft : faAngleDown}
+                onClick={this.toggle} />
+          </div>
+        </div>
+        <div className="level is-mobile m-0 school-card-subheader">
+          <div className="school-card-subheader-city level-item">
+            <small className="is-6_5">
+              <FontAwesomeIcon
+                className={'mr-1' + (this.state.superNarrow && this.state.collapsed ? ' is-hidden' : '')}
+                icon={faMapMarkerAlt} />
+                {school.address.city}
+            </small>
+          </div>
+          <div className="level-item">
+            {typeGradesTag}
+          </div>
+          <div className="school-card-subheader-fraser-summary level-item">
+            {fraserTag}
+          </div>
+        </div>
+        {this.makeCardBody(school, true)}
+      </React.Fragment>
+    );
+
+    return (
+      <div
+        className={'box p-4 school-card' + (this.state.narrow ? ' narrow' : '')}
+        ref={(elem) => this.cardDiv = elem} >
+        {this.state.narrow ? narrowView : wideView}
       </div>
     );
   }
@@ -210,5 +270,6 @@ export default class SchoolCard extends React.Component {
 SchoolCard.propTypes = {
   school: PropTypes.object,
   collapsed: PropTypes.bool,
+  width: PropTypes.oneOf(['m', 's', 'xs']),
   onFocusClick: PropTypes.func
 };

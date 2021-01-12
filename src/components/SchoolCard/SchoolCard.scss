@@ -3,16 +3,87 @@
 
 .school-card {
 
-    &.box {
-      border-radius: 4px;
+  &.box {
+    border-radius: 4px;
+  }
+
+  .is-6_5 {
+    font-size: 0.85rem;
+  }
+
+  hr {
+    background-color: $grey-lighter;
+    height: 1px;
+  }
+
+  .toggle:hover {
+    cursor: pointer;
+  }
+
+  .school-card-header {
+    .level-left {
+      min-width: 0;
+      flex-shrink: 1;
+      flex-basis: 100%;
+      padding-right: 0.5rem;
+    }
+  }
+
+  .school-card-subheader.level {
+    justify-content: normal;
+
+    .level-item {
+      flex-grow: 0 !important;
+      justify-content: flex-start;
     }
 
-    .is-6_5 {
-      font-size: 0.85rem;
+    .school-card-subheader-city {
+      flex-shrink: 1;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
 
-    hr {
-      background-color: $grey-lighter;
-      height: 1px;
+    .school-card-subheader-fraser-summary {
+      flex-grow: 1 !important;
+      justify-content: flex-end;
     }
+  }
+
+  .school-card-footer {
+
+    display: flex;
+
+    .level-left {
+      min-width: 0;
+      flex-shrink: 1;
+      flex-basis: 100%;
+      padding-right: 0.5rem;
+      
+      .school-card-footer-item {
+        display: block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .level-left + .level-right {
+      margin-top: 0;
+    }
+  }
+
+  &.narrow {
+
+    nav.level.school-card-body {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+      margin-bottom: -0.5rem !important;
+
+      .level-item {
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
 }
