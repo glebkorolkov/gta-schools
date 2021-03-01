@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleLeft, faAngleDown, faMap, faMapMarkerAlt, faGlobe, faCrosshairs }
+import { faAngleLeft, faAngleDown, faMap, faLocationArrow, faMapMarkerAlt, faGlobe, faCrosshairs }
   from '@fortawesome/free-solid-svg-icons'
 import _padStart from 'lodash.padstart'
 
@@ -63,16 +63,16 @@ export default class SchoolCard extends React.Component {
         </div>
         <div className="level-item has-text-centered">
           <div>
-            <p className="heading">Fraser Rank</p>
-            <p className="title is-7">
-              {school.fraser ? '#' + Number(school.fraser.rank).toLocaleString() : NDASH}
-            </p>
+            <p className="heading"># Students</p>
+            <p className="title is-7">{school.num_students ? school.num_students : NDASH}</p>
           </div>
         </div>
         <div className="level-item has-text-centered">
           <div>
-            <p className="heading">Fraser Score</p>
-            <p className="title is-7">{school.fraser ? school.fraser.score.toFixed(1) : NDASH}</p>
+            <p className="heading">Fraser</p>
+            <p className="title is-7">
+              {school.fraser ? school.fraser.score.toFixed(1) + ' (#' + Number(school.fraser.rank).toLocaleString() + ")" : NDASH}
+            </p>
           </div>
         </div>
       </nav>
@@ -94,6 +94,13 @@ export default class SchoolCard extends React.Component {
         </a>
       );
     }
+    const boundaryLink = school.boundaries_url ? (
+      <span className="school-card-footer-item is-size-7 ml-3">
+        <a target="_blank" href={school.boundaries_url} title="Open boundary map in new window">
+          <FontAwesomeIcon icon={faMap} />
+        </a>
+      </span>
+    ) : '';
     const focusBtn = this.props.onFocusClick && this.props.school.coords ? (
       <button
         className="button is-small is-text"
@@ -106,11 +113,12 @@ export default class SchoolCard extends React.Component {
       <nav className="level school-card-footer">
         <div className="level-left">
           <span className="school-card-footer-item is-size-7 mr-3">
-            <FontAwesomeIcon icon={faMap} /> {fullAddress}
+            <FontAwesomeIcon icon={faLocationArrow} /> {fullAddress}
           </span>
           <span className="school-card-footer-item is-size-7">
             <FontAwesomeIcon icon={faGlobe} /> {webLink}
           </span>
+          {boundaryLink}
         </div>
         <div className="level-right">
           {focusBtn}
