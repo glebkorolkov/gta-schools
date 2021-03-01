@@ -148,6 +148,9 @@ export default class OpenStreetMap extends React.Component {
     if (hoveredFeatures.length) {
       const feature = hoveredFeatures[0];
       this.setFeatureText(feature, feature.get('name'));
+      this.ol.map.getTargetElement().style.cursor = 'pointer';
+    } else {
+      this.ol.map.getTargetElement().style.cursor = '';
     }
     this.ol.hoveredMarkers = hoveredFeatures;
   }
