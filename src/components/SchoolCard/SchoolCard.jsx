@@ -47,6 +47,12 @@ export default class SchoolCard extends React.Component {
   }
 
   makeQuickFacts(school) {
+    let eqaoContent = NDASH;
+    if (school.eqao && (school.eqao.esl_percent.School !== null || school.eqao.special_percent.School !== null)) {
+      const eqaoEsl = school.eqao.esl_percent.School !== null ? (school.eqao.esl_percent.School * 100).toFixed(0) + '%' : NDASH
+      const eqaoSpecial = school.eqao.special_percent.School !== null ? (school.eqao.special_percent.School * 100).toFixed(0) + '%' : NDASH
+      eqaoContent = eqaoEsl + ' | ' + eqaoSpecial
+    };
     const wideView = (
       <nav className="level my-2 school-card-body">
         <div className="level-item has-text-centered">
@@ -75,6 +81,14 @@ export default class SchoolCard extends React.Component {
             </p>
           </div>
         </div>
+        <div className="level-item has-text-centered">
+          <div>
+            <p className="heading" title="English as a second language &amp; special needs students">ESL | Special</p>
+            <p className="title is-7">
+              {eqaoContent}
+            </p>
+          </div>
+        </div>
       </nav>
     );
     const narrowView = wideView;
@@ -95,10 +109,8 @@ export default class SchoolCard extends React.Component {
       );
     }
     const boundaryLink = school.boundaries_url ? (
-      <span className="school-card-footer-item is-size-7 ml-3">
-        <a target="_blank" href={school.boundaries_url} title="Open boundary map in new window">
-          <FontAwesomeIcon icon={faMap} />
-        </a>
+      <span className="school-card-footer-item is-size-7">
+        <FontAwesomeIcon icon={faMap} /> <a target="_blank" rel="noreferrer" href={school.boundaries_url} title="Open boundary map in new window">Catchment area</a>
       </span>
     ) : '';
     const focusBtn = this.props.onFocusClick && this.props.school.coords ? (
@@ -115,7 +127,7 @@ export default class SchoolCard extends React.Component {
           <span className="school-card-footer-item is-size-7 mr-3">
             <FontAwesomeIcon icon={faLocationArrow} /> {fullAddress}
           </span>
-          <span className="school-card-footer-item is-size-7">
+          <span className="school-card-footer-item is-size-7 mr-3">
             <FontAwesomeIcon icon={faGlobe} /> {webLink}
           </span>
           {boundaryLink}
