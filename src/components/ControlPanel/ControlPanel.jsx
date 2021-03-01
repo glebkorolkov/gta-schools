@@ -52,7 +52,9 @@ export default class ControlPanel extends React.Component {
       ],
       schoolBoards: [
         { label: 'Toronto DSB', checked: true, value: 'TDSB' },
-        { label: 'York Region DSB', checked: false, value: 'YRDSB' }
+        { label: 'York Region DSB', checked: false, value: 'YRDSB' },
+        { label: 'Peel DSB', checked: false, value: 'PDSB' },
+        { label: 'Halton DSB', checked: false, value: 'HDSB' }
       ],
       year: {
         range: [1950, 2021]
