@@ -32,12 +32,16 @@ export default class ControlPanel extends React.Component {
         { label: 'School Board', value: 'school_board' },
         { label: 'Year', value: 'year' },
         { label: 'Fraser Rank', value: 'fraser.rank' },
-        { label: 'Fraser Score', value: 'fraser.score' }
+        { label: 'Fraser Score', value: 'fraser.score' },
+        { label: 'ESL %', value: 'eqao.esl_percent' },
+        { label: 'Special Needs %', value: 'eqao.special_percent' }
       ],
       sortByOrder: {
         'year': 'desc',
         'fraser.rank': 'asc',
-        'fraser.score': 'desc'
+        'fraser.score': 'desc',
+        'eqao.esl_percent': 'desc',
+        'eqao.special_percent': 'asc'
       },
       pageSize: [
         { label: '10', value: 10 },
@@ -63,6 +67,14 @@ export default class ControlPanel extends React.Component {
         score: {
           range: [0, 10]
         }
+      },
+      eqao: {
+        esl: {
+          range: [0, 100]
+        },
+        special: {
+          range: [0, 100]
+        }
       }
     }
     this.toggle = this.toggle.bind(this)
@@ -79,6 +91,8 @@ export default class ControlPanel extends React.Component {
     this.handleSchoolBoardFilter = this.handleSchoolBoardFilter.bind(this)
     this.handleYearChange = this.handleYearChange.bind(this)
     this.handleFraserScoreChange = this.handleFraserScoreChange.bind(this)
+    this.handleEqaoEslPercentChange = this.handleEqaoEslPercentChange.bind(this)
+    this.handleEqaoSpecialPercentChange = this.handleEqaoSpecialPercentChange.bind(this)
     this.updateRangeFilter = this.updateRangeFilter.bind(this)
   }
 
@@ -185,6 +199,16 @@ export default class ControlPanel extends React.Component {
     this.updateRangeFilter(payload, 'fraser.score')
   }
 
+  handleEqaoEslPercentChange(payload) {
+    payload.range = payload.range.map((elem) => elem / 100)
+    this.updateRangeFilter(payload, 'eqao.esl_percent')
+  }
+
+  handleEqaoSpecialPercentChange(payload) {
+    payload.range = payload.range.map((elem) => elem / 100)
+    this.updateRangeFilter(payload, 'eqao.special_percent')
+  }
+
   updateRangeFilter(payload, field) {
     const { range, showNa } = payload
     this.updateFilters(field, val => {
@@ -256,6 +280,28 @@ export default class ControlPanel extends React.Component {
             naToggle={true}
             naToggleLabel="Include schools without Fraser score"
             onChange={this.handleFraserScoreChange}
+          />
+        </Control>
+        <Control label="ESL %">
+          <RangeSlider
+            initRange={this.defaults.eqao.esl.range}
+            increment={10}
+            step={5}
+            naToggle={true}
+            naToggleLabel="Include schools w/o ESL statistics"
+            // labelFormattingFunc={(val) => (val * 100).toFixed(0)}
+            onChange={this.handleEqaoEslPercentChange}
+          />
+        </Control>
+        <Control label="Special Needs %">
+          <RangeSlider
+            initRange={this.defaults.eqao.special.range}
+            increment={10}
+            step={5}
+            naToggle={true}
+            naToggleLabel="Include schools w/o special needs statistics"
+            // labelFormattingFunc={(val) => (val * 100).toFixed(0)}
+            onChange={this.handleEqaoSpecialPercentChange}
           />
         </Control>
       </div>
