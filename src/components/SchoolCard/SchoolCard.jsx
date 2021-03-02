@@ -47,11 +47,18 @@ export default class SchoolCard extends React.Component {
   }
 
   makeQuickFacts(school) {
+
+    const normalizeEqao = (percent) => {
+      return (percent === null || percent === undefined) ? NDASH : (percent * 100).toFixed(0) + '%'
+    }
+
     let eqaoContent = NDASH;
-    if (school.eqao && (school.eqao.esl_percent.School !== null || school.eqao.special_percent.School !== null)) {
-      const eqaoEsl = school.eqao.esl_percent.School !== null ? (school.eqao.esl_percent.School * 100).toFixed(0) + '%' : NDASH
-      const eqaoSpecial = school.eqao.special_percent.School !== null ? (school.eqao.special_percent.School * 100).toFixed(0) + '%' : NDASH
-      eqaoContent = eqaoEsl + ' | ' + eqaoSpecial
+    if (school.eqao) {
+      let eqaoEsl = normalizeEqao(school.eqao.esl_percent)
+      let eqaoSpecial = normalizeEqao(school.eqao.special_percent)
+      if (eqaoEsl !== NDASH || eqaoSpecial !== NDASH) {
+        eqaoContent = eqaoEsl + ' | ' + eqaoSpecial;
+      }
     };
     const wideView = (
       <nav className="level my-2 school-card-body">
