@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+
 import SchoolCard from '../SchoolCard';
 import Pagination from '../Pagination';
 import './SchoolList.scss';
@@ -12,10 +15,16 @@ const SchoolList = (props) => {
 
   const [collapsedHint, setCollapsedHint] = React.useState(false);
   const [page, setPage] = React.useState(1);
+  const [searchKeyword, setSearchKeyword] = React.useState(null);
 
   let sortedSchools = props.schools;
   if (props.sortFunc)
     sortedSchools = props.sortFunc(props.schools);
+  if (searchKeyword && searchKeyword.length > 2) {
+    sortedSchools = sortedSchools.filter(
+      (school) => school.name.toLowerCase().includes(searchKeyword.toLowerCase())
+    )
+  }
 
   const numPages = Math.ceil(sortedSchools.length / pageSize) || 1;
   if (page > numPages) {
@@ -49,6 +58,22 @@ const SchoolList = (props) => {
     setPage(newPage);
   };
 
+  const handleSearchInput = (keyword) => {
+    setSearchKeyword(keyword);
+  };
+
+  const clearSearchInput = () => {
+    setSearchKeyword(null);
+  };
+
+  const nothingFoundMessage = !sortedSchools.length ? (
+    <div className="message is-info is-small">
+      <div className="message-body">
+        No schools found.
+      </div>
+    </div>
+  ) : null;
+
   return (
     <div className="school-list container is-fluid has-background-white-ter">
       <div className="column">
@@ -75,11 +100,15 @@ const SchoolList = (props) => {
             </div>
           </div>
         </div>
+        <div class="level">
+          <input className="input is-small is-rounded" type="text" placeholder="Find school by name"
+            onChange={(event) => handleSearchInput(event.target.value)} />
+        </div>
         <Pagination
           current={page}
           total={numPages}
           onChange={handlePageChange}
-          className={'mb-4' + (!props.schools.length ? ' is-hidden' : '')}
+          className={'mb-4' + (!sortedSchools.length ? ' is-hidden' : '')}
           size="small"
           rounded={true} />
         {displaySchools.map(renderCard)}
@@ -87,9 +116,10 @@ const SchoolList = (props) => {
           current={page}
           total={numPages}
           onChange={handlePageChange}
-          className={'mb-4' + (!props.schools.length ? ' is-hidden' : '')}
+          className={'mb-4' + (!sortedSchools.length ? ' is-hidden' : '')}
           size="small"
           rounded={true} />
+        {nothingFoundMessage}
       </div>
     </div>
   )
