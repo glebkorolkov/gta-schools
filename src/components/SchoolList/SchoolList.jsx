@@ -1,9 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-
 import SchoolCard from '../SchoolCard';
 import Pagination from '../Pagination';
 import './SchoolList.scss';
@@ -15,12 +12,12 @@ const SchoolList = (props) => {
 
   const [collapsedHint, setCollapsedHint] = React.useState(false);
   const [page, setPage] = React.useState(1);
-  const [searchKeyword, setSearchKeyword] = React.useState(null);
+  const [searchKeyword, setSearchKeyword] = React.useState('');
 
   let sortedSchools = props.schools;
   if (props.sortFunc)
     sortedSchools = props.sortFunc(props.schools);
-  if (searchKeyword && searchKeyword.length > 2) {
+  if (searchKeyword.length > 2) {
     sortedSchools = sortedSchools.filter(
       (school) => school.name.toLowerCase().includes(searchKeyword.toLowerCase())
     )
@@ -63,7 +60,7 @@ const SchoolList = (props) => {
   };
 
   const clearSearchInput = () => {
-    setSearchKeyword(null);
+    setSearchKeyword('');
   };
 
   const nothingFoundMessage = !sortedSchools.length ? (
@@ -100,9 +97,11 @@ const SchoolList = (props) => {
             </div>
           </div>
         </div>
-        <div class="level">
+        <div className="level search-box">
           <input className="input is-small is-rounded" type="text" placeholder="Find school by name"
-            onChange={(event) => handleSearchInput(event.target.value)} />
+            onChange={(event) => handleSearchInput(event.target.value)}
+            value={searchKeyword} />
+          <button className="delete is-small" onClick={clearSearchInput}></button>
         </div>
         <Pagination
           current={page}
