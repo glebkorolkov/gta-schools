@@ -34,14 +34,16 @@ export default class ControlPanel extends React.Component {
         { label: 'Fraser Rank', value: 'fraser.rank' },
         { label: 'Fraser Score', value: 'fraser.score' },
         { label: 'ESL %', value: 'eqao.esl_percent' },
-        { label: 'Special Needs %', value: 'eqao.special_percent' }
+        { label: 'Special Needs %', value: 'eqao.special_percent' },
+        { label: 'French Immersion', value: 'french_immersion' }
       ],
       sortByOrder: {
         'year': 'desc',
         'fraser.rank': 'asc',
         'fraser.score': 'desc',
         'eqao.esl_percent': 'desc',
-        'eqao.special_percent': 'asc'
+        'eqao.special_percent': 'asc',
+        'french_immersion': 'desc'
       },
       pageSize: [
         { label: '10', value: 10 },
@@ -75,7 +77,8 @@ export default class ControlPanel extends React.Component {
         special: {
           range: [0, 100]
         }
-      }
+      },
+      frenchImmersion: [{ label: '', checked: false, value: true }]
     }
     this.toggle = this.toggle.bind(this)
     this.toggleAbout = this.toggleAbout.bind(this)
@@ -93,6 +96,7 @@ export default class ControlPanel extends React.Component {
     this.handleFraserScoreChange = this.handleFraserScoreChange.bind(this)
     this.handleEqaoEslPercentChange = this.handleEqaoEslPercentChange.bind(this)
     this.handleEqaoSpecialPercentChange = this.handleEqaoSpecialPercentChange.bind(this)
+    this.handleFrenchImmersionFlagChange = this.handleFrenchImmersionFlagChange.bind(this)
     this.updateRangeFilter = this.updateRangeFilter.bind(this)
   }
 
@@ -209,6 +213,12 @@ export default class ControlPanel extends React.Component {
     this.updateRangeFilter(payload, 'eqao.special_percent')
   }
 
+  handleFrenchImmersionFlagChange(event) {
+    const isChecked = event.target.checked
+    const includeVals = isChecked ? [true] : [null, true, false]
+    this.updateFilters('french_immersion', val => includeVals.includes(val))
+  }
+
   updateRangeFilter(payload, field) {
     const { range, showNa } = payload
     this.updateFilters(field, val => {
@@ -304,6 +314,12 @@ export default class ControlPanel extends React.Component {
             onChange={this.handleEqaoSpecialPercentChange}
           />
         </Control>
+        <InlineControl label="French Immersion Only">
+          <input type="checkbox"
+            checked={this.defaults.frenchImmersion.checked}
+            onChange={this.handleFrenchImmersionFlagChange}
+          />
+        </InlineControl>
       </div>
     )
     const containerClasses = (

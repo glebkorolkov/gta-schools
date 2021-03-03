@@ -176,6 +176,8 @@ export default class SchoolCard extends React.Component {
     const narrowType = narrowReplace[school.type] || school.type;
     const schoolType = isSuperNarrowView ? narrowType : school.type;
 
+    const fiTag = school.french_immersion ?
+      (<span className="tag is-success" title="French Immersion">FI</span>): null
     return (
       <div className="tags has-addons">
         <span
@@ -183,6 +185,7 @@ export default class SchoolCard extends React.Component {
           {schoolType}
         </span>
         <span className="tag is-info">{makeGradesLabel(school.grades)}</span>
+        {fiTag}
       </div>
     )
   }
