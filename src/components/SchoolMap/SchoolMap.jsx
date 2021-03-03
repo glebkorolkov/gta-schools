@@ -58,7 +58,7 @@ export default class SchoolMap extends React.Component {
         .map((school) => ({
           id: school.id,
           name: school.name,
-          position: { lat: school.coords.lat, lon: school.coords.lon },
+          position: { lat: school.coords[0], lon: school.coords[1] },
           icon: {
             type: 'circle',
             radius: this.isSelectedSchool(school) ? 10 : 7,
@@ -75,7 +75,7 @@ export default class SchoolMap extends React.Component {
     if (!selectedSchool || !selectedSchool.boundaries) return null;
     const selectedSchoolBoundaries = selectedSchool.boundaries.map(
       (path) => path.map(
-        (point) => [point.lon, point.lat]
+        (point) => [point[1], point[0]] // lon, lat
       ));
     const greenColor = '#48c774';
     return [{
