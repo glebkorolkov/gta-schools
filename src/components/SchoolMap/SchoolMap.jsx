@@ -99,7 +99,7 @@ export default class SchoolMap extends React.Component {
     this.setState({
       selectedSchool: school,
       mapZoom: this.focusZoom,
-      mapCenter: school.coords,
+      mapCenter: {lat: school.coords[0], lon: school.coords[1]},
     });
   }
 
