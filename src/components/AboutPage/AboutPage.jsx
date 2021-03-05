@@ -21,6 +21,12 @@ const AboutPage = (props) => {
     title="Education Quality and Accountability Office">
       EQAO
     </a>);
+  let updateParagraph = null;
+  if (props.updateDate) {
+    const dt = new Date(props.updateDate);
+    const frmtDt = dt.toLocaleDateString('en-CA', { month: 'long', year: 'numeric', day: 'numeric' })
+    updateParagraph = <p>School data was last updated on <i>{frmtDt}</i>.</p>
+  }
   return (
     <div className={containerClasses}>
       <section className="hero">
@@ -38,6 +44,7 @@ const AboutPage = (props) => {
                 Information for the map was collected from public sources on the Internet,
                 including school boards' websites, {fraserLink} and {eqaoLink}.
               </p>
+              {updateParagraph}
               <h3 className="title is-4">Disclaimer</h3>
               <p>
                 <b>Information presented on the website may be incomplete or inaccurate</b>. It was
@@ -66,7 +73,8 @@ const AboutPage = (props) => {
 
 AboutPage.propTypes = {
   className: PropTypes.string,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  updateDate: PropTypes.string
 };
 
 export default AboutPage;

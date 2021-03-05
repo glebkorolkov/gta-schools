@@ -19,6 +19,7 @@ class App extends React.Component {
     super(props)
     this.state = {
       schools: [],
+      updateDate: null,
       focusedSchoolId: null,
       filters: null,
       controls: {},
@@ -40,7 +41,10 @@ class App extends React.Component {
   componentDidMount() {
     fetch("schools.json")
       .then(res => res.json())
-      .then(res => res.schools)
+      .then(res => {
+        this.setState({ updateDate: res.last_updated })
+        return res.schools
+      })
       .then(schools => {
         schools.forEach((school, i) => {school['_id'] = i + 1})
         this.setState({ schools: schools })
@@ -167,6 +171,7 @@ class App extends React.Component {
         <AboutPage
           className={!this.state.aboutActive ? ' is-hidden' : null}
           onClose={this.handleAboutClose}
+          updateDate={this.state.updateDate}
         />
       </React.Fragment>
     );
