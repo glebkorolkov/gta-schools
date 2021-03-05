@@ -60,10 +60,11 @@ export default class ControlPanel extends React.Component {
         { label: 'Toronto DSB', checked: true, value: 'TDSB' },
         { label: 'York Region DSB', checked: false, value: 'YRDSB' },
         { label: 'Peel DSB', checked: false, value: 'PDSB' },
-        { label: 'Halton DSB', checked: false, value: 'HDSB' }
+        { label: 'Halton DSB', checked: false, value: 'HDSB' },
+        { label: 'Hamilton-Wentworth DSB', checked: false, value: 'HWDSB' }
       ],
       year: {
-        range: [1950, 2021]
+        range: [1900, 2021]
       },
       fraser: {
         score: {
