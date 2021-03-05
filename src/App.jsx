@@ -40,8 +40,9 @@ class App extends React.Component {
   componentDidMount() {
     fetch("schools.json")
       .then(res => res.json())
+      .then(res => res.schools)
       .then(schools => {
-        schools.forEach((school, i) => {school['id'] = i + 1})
+        schools.forEach((school, i) => {school['_id'] = i + 1})
         this.setState({ schools: schools })
       })
     this.setResizeObserver();
