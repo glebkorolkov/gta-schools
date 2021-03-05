@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactGA from 'react-ga';
 import _get from 'lodash.get'
 
 import './App.scss'
@@ -6,8 +7,7 @@ import SchoolMap from './components/SchoolMap'
 import SchoolList from './components/SchoolList'
 import ControlPanel from './components/ControlPanel'
 import AboutPage from './components/AboutPage'
-import {sortNullsLast, makeColorFunc} from './utils'
-
+import {sortNullsLast, makeColorFunc, callInProd} from './utils'
 
 
 class App extends React.Component {
@@ -45,6 +45,8 @@ class App extends React.Component {
         this.setState({ schools: schools })
       })
     this.setResizeObserver();
+    callInProd(ReactGA.initialize, [process.env.REACT_APP_GA_TRACKING_ID, { debug: false }])
+    callInProd(ReactGA.pageview, [window.location.pathname + window.location.search])
   }
 
   componentDidUpdate() {
@@ -113,6 +115,7 @@ class App extends React.Component {
 
   handleAboutOpen() {
     this.setState({ aboutActive: true });
+    callInProd(ReactGA.event, [{category: 'User', action: 'Open About'}])
   }
 
   handleAboutClose() {
