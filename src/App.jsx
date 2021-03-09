@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga'
 import _get from 'lodash.get'
 
 import './App.scss'
