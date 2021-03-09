@@ -1,9 +1,10 @@
-import React from 'react'
+import React from 'react';
+import ReactGA from 'react-ga';
+import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
-import PropTypes from 'prop-types'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
-
+import { callInProd } from '../../utils';
 import './AboutPage.scss';
 
 
@@ -32,6 +33,11 @@ const AboutPage = (props) => {
     updateParagraph = <p>School data was last updated on <i>{frmtDt}</i>.</p>
   }
 
+  const supportSubmitHandler = () => {
+    console.log("Donating...")
+    callInProd(ReactGA.event, [{ category: 'User', action: 'Click Donate' }])
+  }
+
   const supportSection = props.paypalNo ? (
     <React.Fragment>
       <h3 className="title is-4">Support</h3>
@@ -40,7 +46,10 @@ const AboutPage = (props) => {
         spend my time on it. If you found the map useful and would like to say thank you, please
         buy me coffee by clicking the <i>Donate</i> button. It will take you to Paypal. Thank you!
       </p>
-      <form action="https://www.paypal.com/donate" method="post" target="_blank" className="donate-btn">
+      <form action="https://www.paypal.com/donate"
+        method="post"
+        target="_blank"
+        onSubmit={supportSubmitHandler}>
         <input type="hidden" name="business" value={props.paypalNo} />
         <input type="hidden" name="item_name" value="Support for gta-schools.ca website." />
         <input type="hidden" name="currency_code" value="CAD" />
