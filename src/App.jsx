@@ -25,7 +25,8 @@ class App extends React.Component {
       controls: {},
       narrow: false,
       superNarrow: false,
-      aboutActive: false
+      aboutActive: false,
+      paypalNo: null
     }
     this.appDiv = null
     this.resizeObserverSet = false;
@@ -52,6 +53,7 @@ class App extends React.Component {
     this.setResizeObserver();
     callInProd(ReactGA.initialize, [process.env.REACT_APP_GA_TRACKING_ID, { debug: false }])
     callInProd(ReactGA.pageview, [window.location.pathname + window.location.search])
+    this.setState({ paypalNo: process.env.REACT_APP_PAYPAL_NO })
   }
 
   componentDidUpdate() {
@@ -172,6 +174,7 @@ class App extends React.Component {
           className={!this.state.aboutActive ? ' is-hidden' : null}
           onClose={this.handleAboutClose}
           updateDate={this.state.updateDate}
+          paypalNo={this.state.paypalNo}
         />
       </React.Fragment>
     );
