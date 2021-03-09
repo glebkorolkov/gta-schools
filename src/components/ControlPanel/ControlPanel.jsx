@@ -60,6 +60,7 @@ export default class ControlPanel extends React.Component {
         { label: 'Toronto DSB', checked: true, value: 'TDSB' },
         { label: 'York Region DSB', checked: false, value: 'YRDSB' },
         { label: 'Peel DSB', checked: false, value: 'PDSB' },
+        { label: 'Durham DSB', checked: false, value: 'DDSB' },
         { label: 'Halton DSB', checked: false, value: 'HDSB' },
         { label: 'Hamilton-Wentworth DSB', checked: false, value: 'HWDSB' }
       ],
