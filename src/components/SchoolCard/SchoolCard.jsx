@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleLeft, faAngleDown, faMap, faLocationArrow, faMapMarkerAlt, faGlobe, faCrosshairs }
+import { faAngleLeft, faAngleDown, faMap, faLocationArrow, faMapMarkerAlt, faGlobe, faCrosshairs, faImage, faTimesCircle }
   from '@fortawesome/free-solid-svg-icons'
 import _padStart from 'lodash.padstart'
 
@@ -18,9 +18,11 @@ export default class SchoolCard extends React.Component {
     this.state = {
       collapsed: props.collapsed || false,
       narrow: false,
-      superNarrow: false
+      superNarrow: false,
+      imageDisplayed: false
     };
     this.toggle = this.toggle.bind(this);
+    this.toggleImage = this.toggleImage.bind(this);
   }
 
   componentDidMount() {
@@ -44,6 +46,11 @@ export default class SchoolCard extends React.Component {
 
   toggle() {
     this.setState({collapsed: !this.state.collapsed});
+  }
+
+  toggleImage() {
+    const newImageState = this.props.school.image_url ? !this.state.imageDisplayed : false;
+    this.setState({ imageDisplayed: newImageState });
   }
 
   makeQuickFacts(school) {
@@ -128,6 +135,21 @@ export default class SchoolCard extends React.Component {
         <FontAwesomeIcon icon={faCrosshairs} />
       </button>
     ) : null;
+    const imageBtn = this.props.school.image_url ? (
+      <button
+        className={'button is-small is-text' + (this.state.imageDisplayed ? ' is-active' : '')}
+        title="Show school image"
+        onClick={this.toggleImage}>
+        <FontAwesomeIcon icon={this.state.imageDisplayed ? faTimesCircle : faImage} />
+      </button>
+    ) : null;
+    const imageBox = (this.state.imageDisplayed && this.props.school.image_url) ? (
+      <div className="school-card-footer-image box">
+        <img
+          className={this.state.superNarrow ? 'narrow' : null}
+          src={this.props.school.image_url}
+          alt={this.props.school.name} />
+      </div>) : null;
     return (
       <nav className="level school-card-footer">
         <div className="level-left">
@@ -140,8 +162,10 @@ export default class SchoolCard extends React.Component {
           {boundaryLink}
         </div>
         <div className="level-right">
+          {imageBtn}
           {focusBtn}
         </div>
+        {imageBox}
       </nav>
     )
   }

@@ -71,6 +71,24 @@
     .level-left + .level-right {
       margin-top: 0;
     }
+
+    .school-card-footer-image {
+      position: absolute;
+      bottom: 4rem;
+      right: 1rem;
+      padding: .5rem;
+
+      img {
+        max-width: 500px;
+        max-height: 300px;
+
+        &.narrow {
+          max-width: 250px;
+          max-height: 200px;
+        }
+      }
+
+    }
   }
 
   &.narrow {
