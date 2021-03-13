@@ -47,7 +47,10 @@ class App extends React.Component {
         return res.schools
       })
       .then(schools => {
-        schools.forEach((school, i) => {school['_id'] = i + 1})
+        schools.forEach((school, i) => {
+          school._id = i + 1
+          school._year = school.year < 1900 ? 1900 : school.year
+        })
         this.setState({ schools: schools })
       })
     this.setResizeObserver();

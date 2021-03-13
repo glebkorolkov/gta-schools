@@ -200,7 +200,7 @@ export default class ControlPanel extends React.Component {
   }
 
   handleYearChange(payload) {
-    this.updateRangeFilter(payload, 'year')
+    this.updateRangeFilter(payload, '_year')
   }
 
   handleFraserScoreChange(payload) {
