@@ -63,7 +63,8 @@ export default class ControlPanel extends React.Component {
         { label: 'Durham DSB', checked: false, value: 'DDSB' },
         { label: 'Halton DSB', checked: false, value: 'HDSB' },
         { label: 'Upper Grand DSB', checked: false, value: 'UGDSB' },
-        { label: 'Hamilton-W. DSB', checked: false, value: 'HWDSB' }
+        { label: 'Hamilton-W. DSB', checked: false, value: 'HWDSB' },
+        { label: 'Waterloo R. DSB', checked: false, value: 'WRDSB' }
       ],
       year: {
         range: [1900, 2021]
