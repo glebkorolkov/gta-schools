@@ -43,7 +43,9 @@ export default class ControlPanel extends React.Component {
         'fraser.score': 'desc',
         'eqao.esl_percent': 'desc',
         'eqao.special_percent': 'asc',
-        'french_immersion': 'desc'
+        'french_immersion': 'desc',
+        'building.seismically_upgraded': 'asc',
+        'building.potential_closure': 'asc'
       },
       pageSize: [
         { label: '10', value: 10 },
@@ -73,7 +75,13 @@ export default class ControlPanel extends React.Component {
           range: [0, 100]
         }
       },
-      frenchImmersion: [{ label: '', checked: false, value: true }]
+      frenchImmersion: [{ label: '', checked: false, value: true }],
+      seismicUpgrade: [{ label: '', checked: false, value: true }],
+      notPotentialClosure: [{ label: '', checked: false, value: true }]
+    }
+    if (props.region === 'van') {
+      this.defaults.sortBy.push({ label: 'Seismic Upgrade', value: 'building.seismically_upgraded' })
+      this.defaults.sortBy.push({ label: 'Potential Closure', value: 'building.potential_closure' })
     }
     this.toggle = this.toggle.bind(this)
     this.toggleAbout = this.toggleAbout.bind(this)
@@ -88,10 +96,13 @@ export default class ControlPanel extends React.Component {
     this.handleSchoolTypeFilter = this.handleSchoolTypeFilter.bind(this)
     this.handleSchoolBoardFilter = this.handleSchoolBoardFilter.bind(this)
     this.handleYearChange = this.handleYearChange.bind(this)
+    this.handleVanYearChange = this.handleVanYearChange.bind(this)
     this.handleFraserScoreChange = this.handleFraserScoreChange.bind(this)
     this.handleEqaoEslPercentChange = this.handleEqaoEslPercentChange.bind(this)
     this.handleEqaoSpecialPercentChange = this.handleEqaoSpecialPercentChange.bind(this)
     this.handleFrenchImmersionFlagChange = this.handleFrenchImmersionFlagChange.bind(this)
+    this.handleSeismicUpgradeFlagChange = this.handleSeismicUpgradeFlagChange.bind(this)
+    this.handleNotPotentialClosureFlagChange = this.handleNotPotentialClosureFlagChange.bind(this)
     this.updateRangeFilter = this.updateRangeFilter.bind(this)
   }
 
@@ -194,6 +205,20 @@ export default class ControlPanel extends React.Component {
     this.updateRangeFilter(payload, '_year')
   }
 
+  handleVanYearChange(payload) {
+    const { range, showNa } = payload
+    const useRenoYr = showNa
+    this.updateFilters("building", building => {
+      const yearBuilt = building.year_rebuilt || building.year_built
+      const yearRenovated = building.year_upgraded || yearBuilt
+      let val = useRenoYr ? yearRenovated : yearBuilt
+      const maxRange = range[range.length - 1]
+      val = Math.min(Math.max(val, 1900), maxRange)
+      const isNull = (val === null)
+      return !isNull && val <= maxRange && val >= range[0]
+    })
+  }
+
   handleFraserScoreChange(payload) {
     this.updateRangeFilter(payload, 'fraser.score')
   }
@@ -214,6 +239,18 @@ export default class ControlPanel extends React.Component {
     this.updateFilters('french_immersion', val => includeVals.includes(val))
   }
 
+  handleSeismicUpgradeFlagChange(event) {
+    const isChecked = event.target.checked
+    const includeVals = isChecked ? [true] : [null, true, false]
+    this.updateFilters('building.seismically_upgraded', val => includeVals.includes(val))
+  }
+
+  handleNotPotentialClosureFlagChange(event) {
+    const isChecked = event.target.checked
+    const includeVals = isChecked ? [false, null] : [null, true, false]
+    this.updateFilters('building.potential_closure', val => includeVals.includes(val))
+  }
+
   updateRangeFilter(payload, field) {
     const { range, showNa } = payload
     this.updateFilters(field, val => {
@@ -224,6 +261,43 @@ export default class ControlPanel extends React.Component {
   }
 
   render() {
+    const yearFilter = this.props.region === 'van' ? (
+      <Control label="Year">
+        <RangeSlider
+          initRange={this.defaults.year.range}
+          increment={10}
+          naToggle={false}
+          naToggleLabel="Use year of seismic upgrade"
+          onChange={this.handleVanYearChange}
+        />
+      </Control>
+    ) : (
+      <Control label="Year">
+        <RangeSlider
+          initRange={this.defaults.year.range}
+          increment={10}
+          naToggle={true}
+          naToggleLabel="Include schools without year"
+          onChange={this.handleYearChange}
+        />
+      </Control>
+    )
+    const seismicUpgradeToggle = this.props.region === 'van' ? (
+      <InlineControl label="Seismically upgraded only">
+        <input type="checkbox"
+          checked={this.defaults.seismicUpgrade.checked}
+          onChange={this.handleSeismicUpgradeFlagChange}
+        />
+      </InlineControl>
+    ) : null
+    const notPotentialClosureToggle = this.props.region === 'van' ? (
+      <InlineControl label="Not potentially closed only">
+        <input type="checkbox"
+          checked={this.defaults.notPotentialClosure.checked}
+          onChange={this.handleNotPotentialClosureFlagChange}
+        />
+      </InlineControl>
+    ) : null
     const filters = (
       <div className={this.state.collapsed ? 'is-hidden' : null}>
         <h3 className="title is-3">Controls</h3>
@@ -268,15 +342,9 @@ export default class ControlPanel extends React.Component {
             onChange={this.handleSchoolBoardFilter}
           />
         </Control>
-        <Control label="Year">
-          <RangeSlider
-            initRange={this.defaults.year.range}
-            increment={10}
-            naToggle={true}
-            naToggleLabel="Include schools without year"
-            onChange={this.handleYearChange}
-          />
-        </Control>
+        {yearFilter}
+        {seismicUpgradeToggle}
+        {notPotentialClosureToggle}
         <Control label="Fraser Score">
           <RangeSlider
             initRange={this.defaults.fraser.score.range}
@@ -363,5 +431,6 @@ ControlPanel.propTypes = {
   onAboutClick: PropTypes.func,
   displayMode: PropTypes.string,
   collapsed: PropTypes.bool,
-  schoolBoards: PropTypes.arrayOf(PropTypes.object)
+  schoolBoards: PropTypes.arrayOf(PropTypes.object),
+  region: PropTypes.string
 }

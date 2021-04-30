@@ -176,6 +176,7 @@ class App extends React.Component {
             displayMode={this.state.controls ? this.state.controls.display : null}
             collapsed={this.state.narrow}
             schoolBoards={regionalSettings[this.region].schoolBoards}
+            region={this.region}
           />
           {this.renderSchools()}
         </div>
