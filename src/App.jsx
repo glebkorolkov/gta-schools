@@ -58,7 +58,8 @@ class App extends React.Component {
         this.setState({ schools: schools })
       })
     this.setResizeObserver();
-    callInProd(ReactGA.initialize, [process.env.REACT_APP_GA_TRACKING_ID, { debug: false }])
+    const trackingEnvVar = 'REACT_APP_GA_TRACKING_ID_' + this.region.toUpperCase()
+    callInProd(ReactGA.initialize, [process.env[trackingEnvVar], { debug: false }])
     callInProd(ReactGA.pageview, [window.location.pathname + window.location.search])
     this.setState({ paypalNo: process.env.REACT_APP_PAYPAL_NO })
   }
