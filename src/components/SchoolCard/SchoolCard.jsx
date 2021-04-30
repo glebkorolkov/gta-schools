@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleLeft, faAngleDown, faMap, faLocationArrow, faMapMarkerAlt, faGlobe, faCrosshairs, faImage, faTimesCircle }
+import { faAngleLeft, faAngleDown, faMap, faLocationArrow, faMapMarkerAlt, faGlobe,
+  faCrosshairs, faImage, faTimesCircle, faExclamationTriangle, faLock }
   from '@fortawesome/free-solid-svg-icons'
 import _padStart from 'lodash.padstart'
 
@@ -59,6 +60,29 @@ export default class SchoolCard extends React.Component {
       return (percent === null || percent === undefined) ? NDASH : (percent * 100).toFixed(0) + '%'
     }
 
+    const makeYearDisplay = (school) => {
+      let schoolYear = school.year;
+      if (school.building) {
+        const yearBuilt = school.building.year_rebuilt || school.building.year_built
+        const notes = []
+        if (school.building.year_upgraded) {
+          notes.push(`upg. ${school.building.year_upgraded}`)
+        }
+        if (school.building.year_upgraded_est) {
+          notes.push(`upg. est. ${school.building.year_upgraded_est}`)
+        }
+        if (school.building.year_rebuilt_est) {
+          notes.push(`repl. est. ${school.building.year_rebuilt_est}`)
+        }
+        const yearNote = notes.length ? ` (${notes.join(', ')})` : ''
+        schoolYear = `${yearBuilt}${yearNote}`
+        if (!school.building.seismically_upgraded) {
+          schoolYear = <span>{schoolYear} <FontAwesomeIcon className="seismic-icon" size="sm" title="Not seismically upgraded" icon={faExclamationTriangle} /></span>
+        }
+      }
+      return schoolYear;
+    };
+
     let eqaoContent = NDASH;
     if (school.eqao) {
       let eqaoEsl = normalizeEqao(school.eqao.esl_percent)
@@ -67,6 +91,7 @@ export default class SchoolCard extends React.Component {
         eqaoContent = eqaoEsl + ' | ' + eqaoSpecial;
       }
     };
+    
     const wideView = (
       <nav className="level my-2 school-card-body">
         <div className="level-item has-text-centered">
@@ -77,8 +102,8 @@ export default class SchoolCard extends React.Component {
         </div>
         <div className="level-item has-text-centered">
           <div>
-            <p className="heading">Opening Year</p>
-            <p className="title is-7">{school.year || NDASH}</p>
+            <p className="heading">Building Year</p>
+            <p className="title is-7">{makeYearDisplay(school) || NDASH}</p>
           </div>
         </div>
         <div className="level-item has-text-centered">
@@ -249,13 +274,23 @@ export default class SchoolCard extends React.Component {
 
     const typeGradesTag = this.makeTypeGradesTag(school);
     const fraserTag = this.makeFraserTag(school);
-
+    let closureIcon = null;
+    if (school.building?.potential_closure) {
+      closureIcon = (
+        <FontAwesomeIcon
+          className="closure-icon ml-1"
+          icon={faLock}
+          title="Might be closed."
+          size="xs"
+        />
+      )
+    }
     const wideView = (
       <React.Fragment>
         <div className="level is-mobile m-0">
           <div className="level-left">
             <div className="level-item">
-              <span className="title is-6">{school.name}</span>{fraserTag}
+              <span className="title is-6">{school.name}</span>{fraserTag}{closureIcon}
             </div>
           </div>
           <div className="level-right">
