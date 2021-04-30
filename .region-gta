@@ -1,0 +1,6 @@
+REACT_APP_REGION=gta
+REACT_APP_META_TITLE="GTA School Map"
+REACT_APP_META_DESCRIPTION="Interactive map of public schools in the Greater Toronto Area (GTA). Incorporates data from Toronto, York Region, Peel, Durham, Halton, Hamilton-Wentworth, Upper Grand, and Waterloo Region district school boards as well as Fraser Institute and EQAO."
+REACT_APP_META_KEYWORDS="interactive map,school map,public schools,Greater Toronto Area,Toronto,Fraser,EQAO,school rankings,school comparison"
+REACT_APP_MANIFEST_SHORT_NAME="GTA Schools"
+REACT_APP_MANIFEST_NAME="Map of GTA Schools"

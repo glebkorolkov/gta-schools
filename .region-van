@@ -1,0 +1,6 @@
+REACT_APP_REGION=van
+REACT_APP_META_TITLE="Vancouver Area School Map"
+REACT_APP_META_DESCRIPTION="Interactive map of public schools in the Greater Vancouver Area. Incorporates data from Vancouver school board as well as Fraser Institute and the Government of British Columbia."
+REACT_APP_META_KEYWORDS="interactive map,school map,public schools,Vancouver Area,Vancouver,Fraser,school enrolment,school rankings,school comparison"
+REACT_APP_MANIFEST_SHORT_NAME="Vancouver Schools"
+REACT_APP_MANIFEST_NAME="Map of Vancouver Area Schools"
