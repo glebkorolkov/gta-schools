@@ -5,26 +5,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import { callInProd } from '../../utils';
+import contract from './AboutPageContract';
 import './AboutPage.scss';
 
 
 const AboutPage = (props) => {
   const defaultClasses = 'about-page has-background-white-ter';
   const containerClasses = props.className ? [defaultClasses, props.className].join(' ') : defaultClasses;
-  const fraserLink = (
-    <a href="https://www.compareschoolrankings.org/"
-      rel="noreferrer" target="_blank"
-      title="Fraser Institute">
-        Fraser Institute
-    </a>);
-
-  const eqaoLink = (
-    <a href="https://www.eqao.com/the-assessments/find-my-school/"
-    rel="noreferrer"
-    target="_blank"
-    title="Education Quality and Accountability Office">
-      EQAO
-    </a>);
 
   let updateParagraph = null;
   if (props.updateDate) {
@@ -70,14 +57,7 @@ const AboutPage = (props) => {
               <h1 className="title is-1">
                 About
               </h1>
-              <p>
-                This is an interactive map of schools in the Greater Toronto Area area. I built this
-                little website while choosing a school for my child.
-              </p>
-              <p>
-                Information for the map was collected from public sources on the Internet,
-                including school boards' websites, {fraserLink} and {eqaoLink}.
-              </p>
+              {contract[props.region]}
               {updateParagraph}
               <h3 className="title is-4">Disclaimer</h3>
               <p>
@@ -107,6 +87,7 @@ const AboutPage = (props) => {
 }
 
 AboutPage.propTypes = {
+  region: PropTypes.string,
   className: PropTypes.string,
   onClose: PropTypes.func,
   updateDate: PropTypes.string,

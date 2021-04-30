@@ -56,16 +56,7 @@ export default class ControlPanel extends React.Component {
         { label: 'Elementary', checked: true },
         { label: 'Secondary', checked: true }
       ],
-      schoolBoards: [
-        { label: 'Toronto DSB', checked: true, value: 'TDSB' },
-        { label: 'York Region DSB', checked: false, value: 'YRDSB' },
-        { label: 'Peel DSB', checked: false, value: 'PDSB' },
-        { label: 'Durham DSB', checked: false, value: 'DDSB' },
-        { label: 'Halton DSB', checked: false, value: 'HDSB' },
-        { label: 'Upper Grand DSB', checked: false, value: 'UGDSB' },
-        { label: 'Hamilton-W. DSB', checked: false, value: 'HWDSB' },
-        { label: 'Waterloo R. DSB', checked: false, value: 'WRDSB' }
-      ],
+      schoolBoards: props.schoolBoards,
       year: {
         range: [1900, 2021]
       },
@@ -371,5 +362,6 @@ ControlPanel.propTypes = {
   onControlChange: PropTypes.func,
   onAboutClick: PropTypes.func,
   displayMode: PropTypes.string,
-  collapsed: PropTypes.bool
+  collapsed: PropTypes.bool,
+  schoolBoards: PropTypes.arrayOf(PropTypes.object)
 }

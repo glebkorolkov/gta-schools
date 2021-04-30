@@ -17,8 +17,8 @@ export default class SchoolMap extends React.Component {
       selectedSchool: null,
       mapZoom: this.defaultZoom,
       mapCenter: {
-        lat: 43.741667,
-        lon: -79.373333
+        lat: props.initCenter.lat,
+        lon: props.initCenter.lon
       }
     };
     this.handleMarkerClick = this.handleMarkerClick.bind(this);
@@ -33,6 +33,9 @@ export default class SchoolMap extends React.Component {
     }
     if (prevProps.focusedSchoolId !== this.props.focusedSchoolId) {
       this.handleFocusClick(this.props.focusedSchoolId)
+    }
+    if (prevProps.initCenter.lat !== this.props.initCenter.lat || prevProps.initCenter.lon !== this.props.initCenter.lon) {
+      this.setState({ mapCenter: this.props.initCenter })
     }
   }
 
@@ -137,6 +140,7 @@ export default class SchoolMap extends React.Component {
 
 
 SchoolMap.propTypes = {
+  initCenter: PropTypes.object.isRequired,
   schools: PropTypes.arrayOf(PropTypes.object).isRequired,
   colorFunc: PropTypes.func,
   focusedSchoolId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

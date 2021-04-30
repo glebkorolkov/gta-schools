@@ -8,6 +8,7 @@ import SchoolList from './components/SchoolList'
 import ControlPanel from './components/ControlPanel'
 import AboutPage from './components/AboutPage'
 import {sortNullsLast, makeColorFunc, callInProd} from './utils'
+import regionalSettings from './regional_settings'
 
 
 class App extends React.Component {
@@ -17,7 +18,9 @@ class App extends React.Component {
 
   constructor(props) {
     super(props)
+    this.region = process.env.REACT_APP_REGION || 'gta'
     this.state = {
+      mapCenter: regionalSettings[this.region].center,
       schools: [],
       updateDate: null,
       focusedSchoolId: null,
@@ -40,7 +43,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    fetch("schools.json")
+    const schoolFile = regionalSettings[this.region].dataFile
+    fetch(schoolFile)
       .then(res => res.json())
       .then(res => {
         this.setState({ updateDate: res.last_updated })
@@ -139,6 +143,7 @@ class App extends React.Component {
       <React.Fragment>
         <div className={'map-wrapper' + (!mapView ? ' is-hidden' : '')}>
           <SchoolMap
+            initCenter={this.state.mapCenter}
             schools={this.getFilteredSchools()}
             colorFunc={this.makeColorFunc()}
             focusedSchoolId={this.state.focusedSchoolId}
@@ -170,10 +175,12 @@ class App extends React.Component {
             onAboutClick={this.handleAboutOpen}
             displayMode={this.state.controls ? this.state.controls.display : null}
             collapsed={this.state.narrow}
+            schoolBoards={regionalSettings[this.region].schoolBoards}
           />
           {this.renderSchools()}
         </div>
         <AboutPage
+          region={this.region}
           className={!this.state.aboutActive ? ' is-hidden' : null}
           onClose={this.handleAboutClose}
           updateDate={this.state.updateDate}

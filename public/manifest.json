@@ -1,6 +1,6 @@
 {
-  "short_name": "GTA School Map",
-  "name": "Map of GTA schools",
+  "short_name": "__SHORT_NAME__",
+  "name": "__NAME__",
   "icons": [
     {
       "src": "favicon.ico",
