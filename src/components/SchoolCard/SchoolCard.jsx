@@ -76,8 +76,8 @@ export default class SchoolCard extends React.Component {
         }
         const yearNote = notes.length ? ` (${notes.join(', ')})` : ''
         schoolYear = `${yearBuilt}${yearNote}`
-        if (!school.building.seismically_upgraded) {
-          schoolYear = <span>{schoolYear} <FontAwesomeIcon className="seismic-icon" size="sm" title="Not seismically upgraded" icon={faExclamationTriangle} /></span>
+        if (school.building.seismic_risk) {
+          schoolYear = <span>{schoolYear} <FontAwesomeIcon className="seismic-icon" size="sm" title="High seismic risk" icon={faExclamationTriangle} /></span>
         }
       }
       return schoolYear;
@@ -280,7 +280,7 @@ export default class SchoolCard extends React.Component {
         <FontAwesomeIcon
           className="closure-icon ml-1"
           icon={faLock}
-          title="Might be closed."
+          title="High closure risk"
           size="xs"
         />
       )

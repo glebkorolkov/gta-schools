@@ -54,6 +54,15 @@ class App extends React.Component {
         schools.forEach((school, i) => {
           school._id = i + 1
           school._year = school.year < 1900 ? 1900 : school.year
+          if (school.building) {
+            let seismicRisk = null
+            if (school.building.seismic_risk !== undefined) {
+              seismicRisk = school.building.seismic_risk
+            } else if (school.building.seismically_upgraded !== undefined) {
+              seismicRisk = !school.building.seismically_upgraded
+            }
+            school.building.seismic_risk = seismicRisk
+          }
         })
         this.setState({ schools: schools })
       })

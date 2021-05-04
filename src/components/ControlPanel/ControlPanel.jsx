@@ -241,8 +241,8 @@ export default class ControlPanel extends React.Component {
 
   handleSeismicUpgradeFlagChange(event) {
     const isChecked = event.target.checked
-    const includeVals = isChecked ? [true] : [null, true, false]
-    this.updateFilters('building.seismically_upgraded', val => includeVals.includes(val))
+    const includeVals = isChecked ? [false, null] : [null, true, false]
+    this.updateFilters('building.seismic_risk', val => includeVals.includes(val))
   }
 
   handleNotPotentialClosureFlagChange(event) {
@@ -283,7 +283,7 @@ export default class ControlPanel extends React.Component {
       </Control>
     )
     const seismicUpgradeToggle = this.props.region === 'van' ? (
-      <InlineControl label="Seismically upgraded only">
+      <InlineControl label="Only non-high seismic risk">
         <input type="checkbox"
           checked={this.defaults.seismicUpgrade.checked}
           onChange={this.handleSeismicUpgradeFlagChange}
@@ -291,7 +291,7 @@ export default class ControlPanel extends React.Component {
       </InlineControl>
     ) : null
     const notPotentialClosureToggle = this.props.region === 'van' ? (
-      <InlineControl label="Not potentially closed only">
+      <InlineControl label="Exclude schools with high closure risk">
         <input type="checkbox"
           checked={this.defaults.notPotentialClosure.checked}
           onChange={this.handleNotPotentialClosureFlagChange}
