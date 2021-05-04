@@ -27,7 +27,8 @@ const regionalSettings = {
       { label: 'North Van SD', checked: true, value: 'NVSD' },
       { label: 'West Van SD', checked: true, value: 'WVSD' },
       { label: 'Burnaby SD', checked: true, value: 'BSD' },
-      { label: 'Richmond SD', checked: true, value: 'RSD' }
+      { label: 'Richmond SD', checked: true, value: 'RSD' },
+      { label: 'New Westminster SD', checked: true, value: 'NWSD' }
     ]
   }
 }
