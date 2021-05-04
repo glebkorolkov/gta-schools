@@ -23,7 +23,11 @@ const regionalSettings = {
     },
     "dataFile": "schools_van.json",
     "schoolBoards": [
-      { label: 'Vancouver SB', checked: true, value: 'VSB' }
+      { label: 'Vancouver SB', checked: true, value: 'VSB' },
+      { label: 'North Van SD', checked: true, value: 'NVSD' },
+      { label: 'West Van SD', checked: true, value: 'WVSD' },
+      { label: 'Burnaby SD', checked: true, value: 'BSD' },
+      { label: 'Richmond SD', checked: true, value: 'RSD' }
     ]
   }
 }
