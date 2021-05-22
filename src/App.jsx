@@ -34,6 +34,7 @@ class App extends React.Component {
     this.appDiv = null
     this.resizeObserverSet = false;
     this.adjustLookOnResize = this.adjustLookOnResize.bind(this)
+    this.handleYearToggleChange = this.handleYearToggleChange.bind(this)
     this.handleFilterChange = this.handleFilterChange.bind(this)
     this.handleControlChange = this.handleControlChange.bind(this)
     this.handleFocusClick = this.handleFocusClick.bind(this)
@@ -53,7 +54,8 @@ class App extends React.Component {
       .then(schools => {
         schools.forEach((school, i) => {
           school._id = i + 1
-          school._year = school.year < 1900 ? 1900 : school.year
+          // school._year = (school.year && school.year < 1900) ? 1900 : school.year
+          school._year = school.year
           if (school.building) {
             let seismicRisk = null
             if (school.building.seismic_risk !== undefined) {
@@ -120,6 +122,15 @@ class App extends React.Component {
     return (collection) => sortNullsLast(collection, field, order)
   }
 
+  handleYearToggleChange(yearSelectFunc) {
+    let schools = [...this.state.schools]
+    schools = schools.map(school => {
+      school._year = yearSelectFunc(school)
+      return school
+    })
+    this.setState({ schools: schools })
+  }
+
   handleFilterChange(filters) {
     this.setState({ filters: filters })
   }
@@ -180,6 +191,7 @@ class App extends React.Component {
           className={'app' + (this.state.aboutActive ? ' is-hidden' : '')}
           ref={(elem) => this.appDiv = elem} >
           <ControlPanel
+            onYearToggleChange={this.handleYearToggleChange}
             onFilterChange={this.handleFilterChange}
             onControlChange={this.handleControlChange}
             onAboutClick={this.handleAboutOpen}

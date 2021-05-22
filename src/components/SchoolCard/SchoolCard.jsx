@@ -63,7 +63,7 @@ export default class SchoolCard extends React.Component {
     const makeYearDisplay = (school) => {
       let schoolYear = school.year;
       if (school.building) {
-        const yearBuilt = school.building.year_rebuilt || school.building.year_built
+        const yearBuilt = school.building.year_rebuilt || school.building.year_built || NDASH
         const notes = []
         if (school.building.year_upgraded) {
           notes.push(`upg. ${school.building.year_upgraded}`)

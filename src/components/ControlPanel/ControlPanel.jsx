@@ -30,7 +30,7 @@ export default class ControlPanel extends React.Component {
       sortBy: [
         { label: 'School Type', value: 'type' },
         { label: 'School Board', value: 'school_board' },
-        { label: 'Year', value: 'year' },
+        { label: 'Year', value: '_year' },
         { label: 'Fraser Rank', value: 'fraser.rank' },
         { label: 'Fraser Score', value: 'fraser.score' },
         { label: 'ESL %', value: 'eqao.esl_percent' },
@@ -38,7 +38,7 @@ export default class ControlPanel extends React.Component {
         { label: 'French Immersion', value: 'french_immersion' }
       ],
       sortByOrder: {
-        'year': 'desc',
+        '_year': 'desc',
         'fraser.rank': 'asc',
         'fraser.score': 'desc',
         'eqao.esl_percent': 'desc',
@@ -202,35 +202,42 @@ export default class ControlPanel extends React.Component {
   }
 
   handleYearChange(payload) {
-    this.updateRangeFilter(payload, '_year')
+    const { range, toggles } = payload
+    this.updateRangeFilter({ range, showNa: toggles[0] }, '_year')
   }
 
   handleVanYearChange(payload) {
-    const { range, showNa } = payload
-    const useRenoYr = showNa
-    this.updateFilters("building", building => {
-      const yearBuilt = building.year_rebuilt || building.year_built
-      const yearRenovated = building.year_upgraded || yearBuilt
-      let val = useRenoYr ? yearRenovated : yearBuilt
-      const maxRange = range[range.length - 1]
-      val = Math.min(Math.max(val, 1900), maxRange)
-      const isNull = (val === null)
-      return !isNull && val <= maxRange && val >= range[0]
-    })
+    const { range, toggles } = payload
+    const [ useRenoYr, showNa ] = toggles
+    const yearSelectorFunc = (school) => {
+      let year = school.year
+      if (school.building) {
+        const yearBuilt = school.building.year_rebuilt || school.building.year_built
+        const yearRenovated = school.building.year_upgraded || yearBuilt
+        const buildingYear = useRenoYr ? yearRenovated : yearBuilt
+        year = buildingYear || year
+      }
+      return year ? Math.max(year, 1900) : year
+    }
+    this.props.onYearToggleChange(yearSelectorFunc)
+    this.updateRangeFilter({range, showNa}, '_year')
   }
 
   handleFraserScoreChange(payload) {
-    this.updateRangeFilter(payload, 'fraser.score')
+    const { range, toggles } = payload
+    this.updateRangeFilter({range, showNa: toggles[0]}, 'fraser.score')
   }
 
   handleEqaoEslPercentChange(payload) {
-    payload.range = payload.range.map((elem) => elem / 100)
-    this.updateRangeFilter(payload, 'eqao.esl_percent')
+    const { range, toggles } = payload
+    const modRange = range.map((elem) => elem / 100)
+    this.updateRangeFilter({range: modRange, showNa: toggles[0]}, 'eqao.esl_percent')
   }
 
   handleEqaoSpecialPercentChange(payload) {
-    payload.range = payload.range.map((elem) => elem / 100)
-    this.updateRangeFilter(payload, 'eqao.special_percent')
+    const { range, toggles } = payload
+    const modRange = range.map((elem) => elem / 100)
+    this.updateRangeFilter({range: modRange, showNa: toggles[0]}, 'eqao.special_percent')
   }
 
   handleFrenchImmersionFlagChange(event) {
@@ -266,9 +273,11 @@ export default class ControlPanel extends React.Component {
         <RangeSlider
           initRange={this.defaults.year.range}
           increment={10}
-          naToggle={false}
-          naToggleLabel="Use year of seismic upgrade"
           onChange={this.handleVanYearChange}
+          toggles={[
+            { label: "Use year of seismic upgrade", toggled: false },
+            { label: "Include schools without year", toggled: true }
+          ]}
         />
       </Control>
     ) : (
@@ -276,8 +285,9 @@ export default class ControlPanel extends React.Component {
         <RangeSlider
           initRange={this.defaults.year.range}
           increment={10}
-          naToggle={true}
-          naToggleLabel="Include schools without year"
+          toggles={[
+            { label: "Include schools without year", toggled: true }
+          ]}
           onChange={this.handleYearChange}
         />
       </Control>
@@ -350,8 +360,9 @@ export default class ControlPanel extends React.Component {
             initRange={this.defaults.fraser.score.range}
             increment={1.0}
             step={.5}
-            naToggle={true}
-            naToggleLabel="Include schools without Fraser score"
+            toggles={[
+              { label: "Include schools without Fraser score", toggled: true }
+            ]}
             onChange={this.handleFraserScoreChange}
           />
         </Control>
@@ -360,9 +371,9 @@ export default class ControlPanel extends React.Component {
             initRange={this.defaults.eqao.esl.range}
             increment={10}
             step={5}
-            naToggle={true}
-            naToggleLabel="Include schools w/o ESL statistics"
-            // labelFormattingFunc={(val) => (val * 100).toFixed(0)}
+            toggles={[
+              { label: "Include schools w/o ESL statistics", toggled: true }
+            ]}
             onChange={this.handleEqaoEslPercentChange}
           />
         </Control>
@@ -371,9 +382,9 @@ export default class ControlPanel extends React.Component {
             initRange={this.defaults.eqao.special.range}
             increment={10}
             step={5}
-            naToggle={true}
-            naToggleLabel="Include schools w/o special needs statistics"
-            // labelFormattingFunc={(val) => (val * 100).toFixed(0)}
+            toggles={[
+              { label: "Include schools w/o special needs statistics", toggled: true}
+            ]}
             onChange={this.handleEqaoSpecialPercentChange}
           />
         </Control>
@@ -426,6 +437,7 @@ export default class ControlPanel extends React.Component {
 
 
 ControlPanel.propTypes = {
+  onYearToggleChange: PropTypes.func,
   onFilterChange: PropTypes.func,
   onControlChange: PropTypes.func,
   onAboutClick: PropTypes.func,

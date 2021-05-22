@@ -9,80 +9,94 @@ import _debounce from 'lodash.debounce'
 import './RangeSlider.scss'
 
 
-const RangeSlider = (props) => {
+export default class RangeSlider extends React.Component {
 
-  const [data, setData] = React.useState({value: props.initRange, showNa: props.naToggle})
-  const [initData] = React.useState({value: props.initRange, showNa: props.naToggle})
-
-  const fullRange = props.fullRange || props.initRange
-  const minRange = fullRange[0]
-  const maxRange = fullRange[1]
-
-
-  const increment = props.increment
-  let marks = null
-  if (increment) {
-    const numMarks = parseInt((maxRange - minRange) / increment) + 1
-    const markVals = Array.from({ length: numMarks }, (v, i) => i * increment + minRange)
-    const makeLabel = props.labelFormattingFunc || (y => y.toString())
-    marks = markVals.map(val => { return { value: val, label: makeLabel(val) } })
-  }
-
-  const reportRange = (val) => props.onChange(val)
-  const debounceMs = props.debounce || 1000
-  const reportRangeDebounced = React.useRef(_debounce(reportRange, debounceMs))
-
-  const {onChange} = props
-  React.useEffect(() => {
-    onChange({range: initData.value, showNa: initData.showNa})
-  }, [initData, onChange])
-
-  const handleChange = (event, val) => {
-    setData({...data, value: val})
-    const payload = {range: data.value, showNa: data.showNa}
-    reportRangeDebounced.current(payload)
-  }
-
-  const handleNaToggleChange = (event) => {
-    const checked = event.target.checked
-    setData({ ...data, showNa: checked })
-    reportRange({ range: data.value, showNa: checked })
-  }
-
-  const renderNaToggle = () => {
-    if (props.naToggle === true || props.naToggle === false) {
-      const naSwitch = <Switch
-        color="primary"
-        size="small"
-        checked={ data.showNa }
-        onChange={ handleNaToggleChange }
-      />
-      return (
-        <FormControlLabel
-          control={naSwitch}
-          label={props.naToggleLabel || 'Include null values'}
-        />
-      )
+  constructor(props) {
+    super(props)
+    this.state = {
+      value: props.initRange,
+      toggles: props.toggles.map(item => item.toggled)
     }
+    this.handleChange = this.handleChange.bind(this)
+    this.handleToggleChange = this.handleToggleChange.bind(this)
+    this.onChangeDebounced = _debounce(props.onChange, props.debounce || 1000)
   }
 
-  return (
-    <div className="range-slider">
-      <div className="px-3">
-        <Slider
-          className="mb-1"
-          value={data.value}
-          onChange={handleChange}
-          valueLabelDisplay="auto"
-          min={minRange}
-          max={maxRange}
-          marks={marks}
-          step={props.step}
-        />
-        { renderNaToggle() }
+  componentDidMount() {
+    const payload = {
+      range: this.props.initRange,
+      toggles: this.props.toggles.map(item => item.toggled)
+    }
+    this.props.onChange(payload)
+  }
+
+  makeReportRangeDebounced() {
+    const reportRange = (val) => this.props.onChange(val)
+    const debounceMs = this.props.debounce || 1000
+    return _debounce(reportRange, debounceMs)
+  }
+
+  handleChange(event, val) {
+    this.setState({value: val})
+    const payload = {range: val, toggles: this.state.toggles}
+    this.onChangeDebounced(payload)
+  }
+
+  handleToggleChange(event, i) {
+    const toggles = [...this.state.toggles]
+    toggles[i] = event.target.checked
+    this.setState({ toggles: toggles })
+    const payload = { range: this.state.value, toggles: toggles }
+    this.props.onChange(payload)
+  }
+
+  renderToggle(toggle, i) {
+    const toggleSwitch = <Switch
+      color="primary"
+      size="small"
+      checked={ this.state.toggles[i] }
+      onChange={ event => this.handleToggleChange(event, i) }
+    />
+    return (
+      <FormControlLabel
+        control={toggleSwitch}
+        label={toggle.label || 'On/Off'}
+        key={i}
+      />
+    )
+  }
+
+  render() {
+    const fullRange = this.props.fullRange || this.props.initRange
+    const minRange = fullRange[0]
+    const maxRange = fullRange[1]
+    const increment = this.props.increment
+    let marks = null
+    if (increment) {
+      const numMarks = parseInt((maxRange - minRange) / increment) + 1
+      const markVals = Array.from({ length: numMarks }, (v, i) => i * increment + minRange)
+      const makeLabel = this.props.labelFormattingFunc || (y => y.toString())
+      marks = markVals.map(val => { return { value: val, label: makeLabel(val) } })
+    }
+    return (
+      <div className="range-slider">
+        <div className="px-3">
+          <Slider
+            className="mb-1"
+            value={this.state.value}
+            onChange={this.handleChange}
+            valueLabelDisplay="auto"
+            min={minRange}
+            max={maxRange}
+            marks={marks}
+            step={this.props.step}
+          />
+          { this.props.toggles.map((toggle, i) => this.renderToggle(toggle, i)) }
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
+
 }
 
 
@@ -92,11 +106,7 @@ RangeSlider.propTypes = {
   increment: PropTypes.number,
   step: PropTypes.number,
   labelFormattingFunc: PropTypes.func,
-  naToggle: PropTypes.bool,
-  naToggleLabel: PropTypes.string,
+  toggles: PropTypes.arrayOf(PropTypes.object),
   onChange: PropTypes.func.isRequired,
   debounce: PropTypes.number
 }
-
-
-export default RangeSlider
