@@ -4,6 +4,7 @@ const regionalSettings = {
       lat: 43.741667,
       lon: -79.373333
     },
+    "zoom": 12,
     "dataFile": "schools_gta.json",
     "schoolBoards": [
       { label: 'Toronto DSB', checked: true, value: 'TDSB' },
@@ -17,10 +18,15 @@ const regionalSettings = {
     ]
   },
   "van": {
+    // "center": {
+    //   lat: 49.2827,
+    //   lon: -123.1207
+    // },
     "center": {
-      lat: 49.2827,
-      lon: -123.1207
+      lat: 49.25,
+      lon: -123.0
     },
+    "zoom": 11.5,
     "dataFile": "schools_van.json",
     "schoolBoards": [
       { label: 'Vancouver SB', checked: true, value: 'VSB' },

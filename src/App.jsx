@@ -54,7 +54,6 @@ class App extends React.Component {
       .then(schools => {
         schools.forEach((school, i) => {
           school._id = i + 1
-          // school._year = (school.year && school.year < 1900) ? 1900 : school.year
           school._year = school.year
           if (school.building) {
             let seismicRisk = null
@@ -165,6 +164,7 @@ class App extends React.Component {
         <div className={'map-wrapper' + (!mapView ? ' is-hidden' : '')}>
           <SchoolMap
             initCenter={this.state.mapCenter}
+            initZoom={regionalSettings[this.region].zoom}
             schools={this.getFilteredSchools()}
             colorFunc={this.makeColorFunc()}
             focusedSchoolId={this.state.focusedSchoolId}

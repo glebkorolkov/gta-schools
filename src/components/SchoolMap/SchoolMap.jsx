@@ -11,7 +11,7 @@ export default class SchoolMap extends React.Component {
 
   constructor(props) {
     super(props);
-    this.defaultZoom = 12;
+    this.defaultZoom = props.initZoom;
     this.focusZoom = 16;
     this.state = {
       selectedSchool: null,
