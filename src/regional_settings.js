@@ -28,7 +28,9 @@ const regionalSettings = {
       { label: 'West Van SD', checked: true, value: 'WVSD' },
       { label: 'Burnaby SD', checked: true, value: 'BSD' },
       { label: 'Richmond SD', checked: true, value: 'RSD' },
-      { label: 'New Westminster SD', checked: true, value: 'NWSD' }
+      { label: 'New West. SD', checked: true, value: 'NWSD' },
+      { label: 'Surrey SD', checked: true, value: 'SSD' },
+      { label: 'Coquitlam SD', checked: true, value: 'CSD' }
     ]
   }
 }
