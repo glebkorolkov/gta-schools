@@ -33,6 +33,10 @@ const gtaIntro = (
       little website while choosing a school for my child.
     </p>
     <p>
+      <i>For a map of schools in Greater Vancouver
+      visit <a href="https://van-schools.ca" target="_blank" rel="noreferrer">van-schools.ca</a>.</i>
+    </p>
+    <p>
       Information for the map was collected from public sources on the Internet,
       including school boards' websites, {fraserLink} and {eqaoLink}.
     </p>
@@ -44,6 +48,10 @@ const vanIntro = (
     <p>
       This is an interactive map of schools in the Greater Vancouver Area. I built this
       little website while choosing a school for my child.
+    </p>
+    <p>
+      <i>For a map of schools in the Greater Toronto Area
+      visit <a href="https://gta-schools.ca" target="_blank" rel="noreferrer">gta-schools.ca</a>.</i>
     </p>
     <p>
       Information for the map was collected from public sources on the Internet,
