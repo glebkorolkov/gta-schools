@@ -61,7 +61,7 @@ const AboutPage = (props) => {
               {updateParagraph}
               <p>
                 If you have a question or feedback please send me an email
-                at <span class="e" data-user="ollehsloohcsnac" data-domain="moc.liamg"></span>.
+                at <span className="e" data-user="ollehsloohcsnac" data-domain="moc.liamg"></span>.
               </p>
               <h3 className="title is-4">Disclaimer</h3>
               <p>
