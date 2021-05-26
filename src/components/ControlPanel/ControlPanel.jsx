@@ -44,7 +44,7 @@ export default class ControlPanel extends React.Component {
         'eqao.esl_percent': 'desc',
         'eqao.special_percent': 'asc',
         'french_immersion': 'desc',
-        'building.seismically_upgraded': 'asc',
+        'building.seismic_risk': 'asc',
         'building.potential_closure': 'asc'
       },
       pageSize: [
@@ -80,7 +80,7 @@ export default class ControlPanel extends React.Component {
       notPotentialClosure: [{ label: '', checked: false, value: true }]
     }
     if (props.region === 'van') {
-      this.defaults.sortBy.push({ label: 'Seismic Upgrade', value: 'building.seismically_upgraded' })
+      this.defaults.sortBy.push({ label: 'Seismic Risk', value: 'building.seismic_risk' })
       this.defaults.sortBy.push({ label: 'Potential Closure', value: 'building.potential_closure' })
     }
     this.toggle = this.toggle.bind(this)

@@ -73,6 +73,31 @@ export default class SchoolMap extends React.Component {
       )
   }
 
+  makeTransitMarkers() {
+    const stations = this.props.transit || []
+    stations.forEach((station, i) => {
+      station.id = `transit_${i + 1}`
+      const lineName = station.line.replace(/Line$/, '').trim()
+      station.displayName = `${station.name} Station (${lineName} Line)`
+    })
+    return (
+      stations
+        .map((station) => ({
+          line: station.id,
+          name: station.displayName,
+          position: { lat: station.lat, lon: station.lon },
+          icon: {
+            type: 'circle',
+            radius: 4,
+            strokeColor: station.color,
+            strokeWidth: 3,
+            fillColor: 'white'
+          }
+        })
+      )
+    )
+  }
+
   makeSchoolAreaPolygons() {
     const selectedSchool = this.state.selectedSchool
     if (!selectedSchool || !selectedSchool.boundaries) return null;
@@ -118,7 +143,7 @@ export default class SchoolMap extends React.Component {
           className="school-map"
           zoom={this.state.mapZoom}
           center={this.state.mapCenter}
-          markers={this.makeSchoolMarkers()}
+          markers={[...this.makeSchoolMarkers(), ...this.makeTransitMarkers()]}
           polygons={this.makeSchoolAreaPolygons()}
           onMarkerClick={this.handleMarkerClick} />
         <div className="school-info">

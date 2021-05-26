@@ -22,6 +22,7 @@ class App extends React.Component {
     this.state = {
       mapCenter: regionalSettings[this.region].center,
       schools: [],
+      transit: [],
       updateDate: null,
       focusedSchoolId: null,
       filters: null,
@@ -49,6 +50,9 @@ class App extends React.Component {
       .then(res => res.json())
       .then(res => {
         this.setState({ updateDate: res.last_updated })
+        if (res.transit) {
+          this.setState({ transit: res.transit })
+        }
         return res.schools
       })
       .then(schools => {
@@ -166,6 +170,7 @@ class App extends React.Component {
             initCenter={this.state.mapCenter}
             initZoom={regionalSettings[this.region].zoom}
             schools={this.getFilteredSchools()}
+            transit={this.state.transit}
             colorFunc={this.makeColorFunc()}
             focusedSchoolId={this.state.focusedSchoolId}
             cardWidth={cardWidth}
